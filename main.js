@@ -22,7 +22,7 @@ let gameOptions = {
     //     sliceTextStrokeColor: "#ffffff"
     // },
     slices: [{
-            degrees: 40,
+            degrees: 45,
             startColor: 0x9960FC,
             endColor: 0x6104FF,
             rings: 3,
@@ -31,7 +31,7 @@ let gameOptions = {
             text: "BAAL"
         },
         {
-            degrees: 40,
+            degrees: 45,
             startColor: 0xff0000,
             endColor: 0x550000,
             rings: 3,
@@ -40,7 +40,7 @@ let gameOptions = {
             text: "DILUC"
         },
         {
-            degrees: 35,
+            degrees: 40,
             startColor: 0x58C2FF,
             endColor: 0x00A2FF,
             rings: 3,
@@ -49,7 +49,7 @@ let gameOptions = {
             text: "GANYU"
         },
         {
-            degrees: 35,
+            degrees: 40,
             startColor: 0x9960FC,
             endColor: 0x6104FF,
             rings: 3,
@@ -76,7 +76,7 @@ let gameOptions = {
             text: "QIQI"
         },
         {
-            degrees: 40,
+            degrees: 20,
             startColor: 0x574529,
             endColor: 0x54380E,
             rings: 3,
@@ -177,6 +177,15 @@ class playGame extends Phaser.Scene {
 
         // loading pin image
         this.load.image("pin", "/img/pin.png");
+
+        this.load.image('diluc', '/img/diluc.png');
+        this.load.image('ganyu', '/img/ganyu.png');
+        this.load.image('keqing', '/img/keqing.png');
+        this.load.image('monna', '/img/mona.png');
+        this.load.image('qiqi', '/img/qiqi.png');
+        this.load.image('venti', '/img/venti.png');
+        this.load.image('zhongli', '/img/zhongli.png');
+        this.load.image('baal', '/img/baal.png');
 
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
@@ -399,19 +408,23 @@ class playGame extends Phaser.Scene {
                             this.prizeText.setText(gameOptions.slices[prize].text);
 
                             drumSfx.play();
-                            // this.pin.visible = false;
+                            this.wheelContainer.visible = false;
+                            this.pin.visible = false
                             this.yougot.visible = true;
+
+                            this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `${gameOptions.slices[prize].text.toLowerCase()}`);
+                            this.waifumu.visible = true;
+
                             this.add.text(10, this.cameras.main.centerY, `You got ${gameOptions.slices[prize].text}! Congrats :D`, {
                                 fontSize: '40px',
                                 fontFamily: 'Arial',
                                 color: 'red',
                                 backgroundColor: 'transparent'
                             });
-
                             // this.restart.visible = true;
-                            // this.input.on("pointerdown", this.restart, this);
                             // player can spin again
-                            this.canSpin = true;
+                            this.canSpin = false;
+                            this.input.on("pointerdown", this.restartGame, this);
                         }
                     })
                 }
@@ -419,8 +432,9 @@ class playGame extends Phaser.Scene {
         }
     }
 
-    restart() {
+    restartGame() {
         this.scene.restart();
         this
+        drumSfx.stop();
     }
 }
