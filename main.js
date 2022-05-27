@@ -1,5 +1,6 @@
 // the game itself
 let game;
+var drumSfx;
 
 let gameOptions = {
 
@@ -177,6 +178,11 @@ class playGame extends Phaser.Scene {
         // loading pin image
         this.load.image("pin", "/img/pin.png");
 
+        this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
+        this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
+        this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
+        this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
+
         // loading icons spritesheet
         this.load.spritesheet("icons", "/img/spritesheet.png", {
             frameWidth: 88,
@@ -188,6 +194,12 @@ class playGame extends Phaser.Scene {
     // method to be executed once the scene has been created
     create() {
 
+        this.drum = this.sound.add('drum');
+        drumSfx = this.sound.add('drum');
+        this.yougot = this.add.sprite(600, 600, 'yougot');
+        this.yougot.visible = false;
+        this.restart = this.add.sprite(400, 170, 'restart').setScale(0.30);
+        this.restart.visible = false;
         // starting degrees
         let startDegrees = -90;
 
@@ -386,6 +398,18 @@ class playGame extends Phaser.Scene {
                             // displaying prize text
                             this.prizeText.setText(gameOptions.slices[prize].text);
 
+                            drumSfx.play();
+                            // this.pin.visible = false;
+                            this.yougot.visible = true;
+                            this.add.text(10, this.cameras.main.centerY, `You got ${gameOptions.slices[prize].text}! Congrats :D`, {
+                                fontSize: '40px',
+                                fontFamily: 'Arial',
+                                color: 'red',
+                                backgroundColor: 'transparent'
+                            });
+
+                            // this.restart.visible = true;
+                            // this.input.on("pointerdown", this.restart, this);
                             // player can spin again
                             this.canSpin = true;
                         }
@@ -393,5 +417,10 @@ class playGame extends Phaser.Scene {
                 }
             });
         }
+    }
+
+    restart() {
+        this.scene.restart();
+        this
     }
 }
