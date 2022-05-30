@@ -427,7 +427,6 @@ class playGame extends Phaser.Scene {
 
                 // function to be executed once the tween has been completed
                 onComplete: function (tween) {
-                    this.spinSfx.stop();
                     // another tween to rotate a bit in the opposite direction
                     this.tweens.add({
                         targets: [this.wheelContainer],
@@ -436,7 +435,7 @@ class playGame extends Phaser.Scene {
                         ease: "Cubic.easeIn",
                         callbackScope: this,
                         onComplete: function (tween) {
-
+                            this.spinSfx.stop();
                             // displaying prize text
                             this.prizeText.setText(gameOptions.slices[prize].text);
                             this.wheelContainer.visible = false;
