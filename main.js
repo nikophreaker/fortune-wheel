@@ -179,7 +179,7 @@ class playGame extends Phaser.Scene {
                     sliceText: "ZONK",
                     sliceTextStyle: {
                         fontFamily: "Arial Black",
-                        fontSize: 72
+                        fontSize: 24
                     },
                 }
             ],
@@ -203,7 +203,7 @@ class playGame extends Phaser.Scene {
             },
 
             // wheel radius, in pixels
-            wheelRadius: 240,
+            wheelRadius: 190,
 
             // color of stroke lines
             strokeColor: 0xffffff,
