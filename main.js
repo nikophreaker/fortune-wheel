@@ -1,6 +1,6 @@
 // the game itself
 let game;
-var drumSfx;
+var ticket;
 
 let gameOptions = {
 
@@ -22,6 +22,7 @@ let gameOptions = {
     //     sliceTextStrokeColor: "#ffffff"
     // },
     slices: [{
+            id: 1,
             degrees: 45,
             startColor: 0x9960FC,
             endColor: 0x6104FF,
@@ -31,6 +32,7 @@ let gameOptions = {
             text: "BAAL"
         },
         {
+            id: 2,
             degrees: 45,
             startColor: 0xff0000,
             endColor: 0x550000,
@@ -40,6 +42,7 @@ let gameOptions = {
             text: "DILUC"
         },
         {
+            id: 3,
             degrees: 40,
             startColor: 0x58C2FF,
             endColor: 0x00A2FF,
@@ -49,6 +52,7 @@ let gameOptions = {
             text: "GANYU"
         },
         {
+            id: 4,
             degrees: 40,
             startColor: 0x9960FC,
             endColor: 0x6104FF,
@@ -58,6 +62,7 @@ let gameOptions = {
             text: "KEQING"
         },
         {
+            id: 5,
             degrees: 35,
             startColor: 0x65E1FF,
             endColor: 0x00CDFF,
@@ -67,6 +72,7 @@ let gameOptions = {
             text: "MONNA"
         },
         {
+            id: 6,
             degrees: 35,
             startColor: 0xC9F4F7,
             endColor: 0x7CF7FF,
@@ -76,6 +82,7 @@ let gameOptions = {
             text: "QIQI"
         },
         {
+            id: 7,
             degrees: 20,
             startColor: 0x574529,
             endColor: 0x54380E,
@@ -85,6 +92,7 @@ let gameOptions = {
             text: "ZHONGLI"
         },
         {
+            id: 8,
             degrees: 40,
             startColor: 0x6FF78F,
             endColor: 0x35EF60,
@@ -94,6 +102,7 @@ let gameOptions = {
             text: "VENTI"
         },
         {
+            id: 9,
             degrees: 60,
             startColor: 0x000000,
             endColor: 0xffff00,
@@ -109,8 +118,8 @@ let gameOptions = {
 
     // wheel rotation duration range, in milliseconds
     rotationTimeRange: {
-        min: 3000,
-        max: 4500
+        min: 4500,
+        max: 4000
     },
 
     // wheel rounds before it stops
@@ -175,6 +184,22 @@ class playGame extends Phaser.Scene {
     // method to be executed when the scene preloads
     preload() {
 
+        fetch('https://msportsid.com/api/user/profil', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`
+            }
+        }).then(res => {
+            res.json().then(res2 => {
+                // const value = `Name: ${res2.posts.id}`
+                ticket = res2[0].user_points.total_point;
+                console.log(res2[0].user_points.total_point)
+            })
+        }).catch(err => {
+            console.log(err)
+        });
+
         // loading pin image
         this.load.image("pin", "/img/pin.png");
 
@@ -191,7 +216,8 @@ class playGame extends Phaser.Scene {
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
-
+        this.load.audio('zonk', './sounds/oof.mp3');
+        this.load.audio('spin', './sounds/spinsound.mp3')
         // loading icons spritesheet
         this.load.spritesheet("icons", "/img/spritesheet.png", {
             frameWidth: 88,
@@ -203,12 +229,15 @@ class playGame extends Phaser.Scene {
     // method to be executed once the scene has been created
     create() {
 
-        this.drum = this.sound.add('drum');
-        drumSfx = this.sound.add('drum');
+        this.drumSfx = this.sound.add('drum');
+        this.zonkSfx = this.sound.add('zonk');
+        this.spinSfx = this.sound.add('spin');
         this.yougot = this.add.sprite(600, 600, 'yougot');
         this.yougot.visible = false;
         this.restart = this.add.sprite(400, 170, 'restart').setScale(0.30);
         this.restart.visible = false;
+        this.showTicket = this.add.text(20, 20, `Current Ticket: ${ticket}`);
+        this.showTicket.visible = true;
         // starting degrees
         let startDegrees = -90;
 
@@ -334,12 +363,16 @@ class playGame extends Phaser.Scene {
         this.input.on("pointerdown", this.spinWheel, this);
     }
 
+    update() {
+        this.showTicket.setText(`Current Ticket: ${ticket}`);
+    }
+
     // function to spin the wheel
     spinWheel() {
 
         // can we spin the wheel?
-        if (this.canSpin) {
-
+        if (this.canSpin && ticket >= 1) {
+            this.spinSfx.play();
             // resetting text field
             this.prizeText.setText("");
 
@@ -394,7 +427,7 @@ class playGame extends Phaser.Scene {
 
                 // function to be executed once the tween has been completed
                 onComplete: function (tween) {
-
+                    this.spinSfx.stop();
                     // another tween to rotate a bit in the opposite direction
                     this.tweens.add({
                         targets: [this.wheelContainer],
@@ -406,21 +439,34 @@ class playGame extends Phaser.Scene {
 
                             // displaying prize text
                             this.prizeText.setText(gameOptions.slices[prize].text);
-
-                            drumSfx.play();
                             this.wheelContainer.visible = false;
                             this.pin.visible = false
-                            this.yougot.visible = true;
 
-                            this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `${gameOptions.slices[prize].text.toLowerCase()}`);
-                            this.waifumu.visible = true;
+                            if (gameOptions.slices[prize].id != 9) {
+                                this.drumSfx.play();
+                                this.yougot.visible = true;
+                                this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `${gameOptions.slices[prize].text.toLowerCase()}`);
+                                this.waifumu.setDisplaySize(200, 450);
+                                this.waifumu.visible = true;
 
-                            this.add.text(10, this.cameras.main.centerY, `You got ${gameOptions.slices[prize].text}! Congrats :D`, {
-                                fontSize: '40px',
-                                fontFamily: 'Arial',
-                                color: 'red',
-                                backgroundColor: 'transparent'
-                            });
+                                this.add.text(10, this.cameras.main.centerY, `You got ${gameOptions.slices[prize].text}! Congrats :D`, {
+                                    fontSize: '40px',
+                                    fontFamily: 'Arial',
+                                    color: 'red',
+                                    backgroundColor: 'transparent'
+                                });
+
+                            } else {
+                                this.zonkSfx.play();
+                                this.add.text(10, this.cameras.main.centerY, `You got zonk, sorry... XD`, {
+                                    fontSize: '40px',
+                                    fontFamily: 'Arial',
+                                    color: 'red',
+                                    backgroundColor: 'transparent'
+                                });
+
+                            }
+
                             // this.restart.visible = true;
                             // player can spin again
                             this.canSpin = false;
@@ -429,12 +475,15 @@ class playGame extends Phaser.Scene {
                     })
                 }
             });
+        } else if (ticket < 1) {
+            console.log("Out of ticket")
         }
     }
 
     restartGame() {
+        this.drumSfx.stop();
+        this.zonkSfx.stop();
         this.scene.restart();
         this
-        drumSfx.stop();
     }
 }
