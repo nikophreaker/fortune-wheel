@@ -20,7 +20,7 @@ window.onload = function () {
         },
 
         // game background color
-        backgroundColor: 0x000000,
+        backgroundColor: 0x560000,
 
         // scenes used by the game
         scene: [playGame]
@@ -44,7 +44,7 @@ class playGame extends Phaser.Scene {
     // method to be executed when the scene preloads
     preload() {
 
-        fetch('https://msportsid.com/api/user/profil', {
+        fetch('https://api.msportsid.com/api/game/tiket', {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,8 +53,8 @@ class playGame extends Phaser.Scene {
         }).then(res => {
             res.json().then(res2 => {
                 // const value = `Name: ${res2.posts.id}`
-                ticket = res2[0].user_points.total_point;
-                console.log(res2[0].user_points.total_point)
+                ticket = res2.data[0].tiket;
+                console.log(res2.data[0].tiket)
             })
         }).catch(err => {
             console.log(err)
@@ -380,6 +380,11 @@ class playGame extends Phaser.Scene {
 
         // adding the pin in the middle of the canvas
         this.pin = this.add.sprite(game.config.width / 2, game.config.height / 2, "pin");
+        this.pin.setInteractive();
+
+        // this.pin.on('pointerdown', function (pointer) {
+        //     this.spinWheel();
+        // }, this);
 
         // adding the text field
         this.prizeText = this.add.text(game.config.width / 2, game.config.height - 20, "Spin the wheel", {
@@ -395,7 +400,8 @@ class playGame extends Phaser.Scene {
         this.canSpin = true;
 
         // waiting for your input, then calling "spinWheel" function
-        this.input.on("pointerdown", this.spinWheel, this);
+        this.pin.on("pointerdown", this.spinWheel, this);
+        // this.input.on("pointerdown", this.spinWheel, this);
     }
 
     update() {
