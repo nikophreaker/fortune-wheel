@@ -529,7 +529,7 @@ class playGame extends Phaser.Scene {
             }
         }).then(res => {
             res.json().then(res2 => {
-                if (res2.messege != null) {
+                if (res2.messege != undefined) {
                     // promt view to know your ticket insufficient
                     Android.showToast(res2.messege);
                     console.log(res2.messege);
