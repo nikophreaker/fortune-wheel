@@ -3,6 +3,7 @@ let game;
 var ticket;
 
 let gameOptions;
+let textStyle;
 
 // once the window loads...
 window.onload = function () {
@@ -60,169 +61,273 @@ class playGame extends Phaser.Scene {
             console.log(err)
         });
 
-        // setting gameOptions
-        gameOptions = {
+        textStyle = {
+                fontFamily: "Arial Black",
+                fontSize: 22,
+                align: "center"
+            },
 
-            // slices configuration
+            // setting gameOptions
+            gameOptions = {
 
-            // {
-            //     degrees: 125,
-            //     startColor: 0xff00ff,
-            //     endColor: 0x0000ff,
-            //     rings: 10,
-            //     text: "BLUE TEXT, WHITE STROKE",
-            //     sliceText: "BLUE",
-            //     sliceTextStyle: {
-            //         fontFamily: "Arial Black",
-            //         fontSize: 36,
-            //         color: "#000077"
-            //     },
-            //     sliceTextStroke: 8,
-            //     sliceTextStrokeColor: "#ffffff"
-            // },
+                // slices configuration
 
-            slices: [{
-                    id: 1,
-                    degrees: 45,
-                    startColor: "9960FC",
-                    endColor: "6104FF",
-                    rings: 3,
-                    iconFrame: 0,
-                    iconScale: 0.4,
-                    text: "BAAL",
-                    icon: "/img/resized/baal.png"
-                },
-                {
-                    id: 2,
-                    degrees: 45,
-                    startColor: "ff0000",
-                    endColor: "550000",
-                    rings: 3,
-                    iconFrame: 1,
-                    iconScale: 0.4,
-                    text: "DILUC",
-                    icon: "/img/resized/diluc.png"
-                },
-                {
-                    id: 3,
-                    degrees: 40,
-                    startColor: "58C2FF",
-                    endColor: "00A2FF",
-                    rings: 3,
-                    iconFrame: 2,
-                    iconScale: 0.4,
-                    text: "GANYU",
-                    icon: "/img/resized/ganyu.png"
-                },
-                {
-                    id: 4,
-                    degrees: 40,
-                    startColor: "9960FC",
-                    endColor: "6104FF",
-                    rings: 3,
-                    iconFrame: 3,
-                    iconScale: 0.4,
-                    text: "KEQING",
-                    icon: "/img/resized/keqing.png"
-                },
-                {
-                    id: 5,
-                    degrees: 35,
-                    startColor: "65E1FF",
-                    endColor: "00CDFF",
-                    rings: 3,
-                    iconFrame: 4,
-                    iconScale: 0.4,
-                    text: "MONNA",
-                    icon: "/img/resized/mona.png"
-                },
-                {
-                    id: 6,
-                    degrees: 35,
-                    startColor: "C9F4F7",
-                    endColor: "7CF7FF",
-                    rings: 3,
-                    iconFrame: 5,
-                    iconScale: 0.4,
-                    text: "QIQI",
-                    icon: "/img/resized/qiqi.png"
-                },
-                {
-                    id: 7,
-                    degrees: 20,
-                    startColor: "574529",
-                    endColor: "54380E",
-                    rings: 3,
-                    iconFrame: 6,
-                    iconScale: 0.4,
-                    text: "ZHONGLI",
-                    icon: "/img/resized/zhongli.png"
-                },
-                {
-                    id: 8,
-                    degrees: 40,
-                    startColor: "6FF78F",
-                    endColor: "35EF60",
-                    rings: 3,
-                    iconFrame: 7,
-                    iconScale: 0.4,
-                    text: "VENTI",
-                    icon: "/img/resized/venti.png"
-                },
-                {
-                    id: 9,
-                    degrees: 60,
-                    startColor: "000000",
-                    endColor: "ffff00",
-                    rings: 3,
-                    text: "POO :(",
-                    sliceText: "ZONK",
-                    sliceTextStyle: {
-                        fontFamily: "Arial Black",
-                        fontSize: 24
+                // {
+                //     degrees: 125,
+                //     startColor: 0xff00ff,
+                //     endColor: 0x0000ff,
+                //     rings: 10,
+                //     text: "BLUE TEXT, WHITE STROKE",
+                //     sliceText: "BLUE",
+                //     sliceTextStyle: {
+                //         fontFamily: "Arial Black",
+                //         fontSize: 36,
+                //         color: "#000077"
+                //     },
+                //     sliceTextStroke: 8,
+                //     sliceTextStrokeColor: "#ffffff"
+                // },
+
+                // slices: [{
+                //         id: 1,
+                //         degrees: 45,
+                //         startColor: "9960FC",
+                //         endColor: "6104FF",
+                //         rings: 3,
+                //         iconFrame: 0,
+                //         iconScale: 0.4,
+                //         text: "BAAL",
+                //         icon: "/img/resized/baal.png"
+                //     },
+                //     {
+                //         id: 2,
+                //         degrees: 45,
+                //         startColor: "ff0000",
+                //         endColor: "550000",
+                //         rings: 3,
+                //         iconFrame: 1,
+                //         iconScale: 0.4,
+                //         text: "DILUC",
+                //         icon: "/img/resized/diluc.png"
+                //     },
+                //     {
+                //         id: 3,
+                //         degrees: 40,
+                //         startColor: "58C2FF",
+                //         endColor: "00A2FF",
+                //         rings: 3,
+                //         iconFrame: 2,
+                //         iconScale: 0.4,
+                //         text: "GANYU",
+                //         icon: "/img/resized/ganyu.png"
+                //     },
+                //     {
+                //         id: 4,
+                //         degrees: 40,
+                //         startColor: "9960FC",
+                //         endColor: "6104FF",
+                //         rings: 3,
+                //         iconFrame: 3,
+                //         iconScale: 0.4,
+                //         text: "KEQING",
+                //         icon: "/img/resized/keqing.png"
+                //     },
+                //     {
+                //         id: 5,
+                //         degrees: 35,
+                //         startColor: "65E1FF",
+                //         endColor: "00CDFF",
+                //         rings: 3,
+                //         iconFrame: 4,
+                //         iconScale: 0.4,
+                //         text: "MONNA",
+                //         icon: "/img/resized/mona.png"
+                //     },
+                //     {
+                //         id: 6,
+                //         degrees: 35,
+                //         startColor: "C9F4F7",
+                //         endColor: "7CF7FF",
+                //         rings: 3,
+                //         iconFrame: 5,
+                //         iconScale: 0.4,
+                //         text: "QIQI",
+                //         icon: "/img/resized/qiqi.png"
+                //     },
+                //     {
+                //         id: 7,
+                //         degrees: 20,
+                //         startColor: "574529",
+                //         endColor: "54380E",
+                //         rings: 3,
+                //         iconFrame: 6,
+                //         iconScale: 0.4,
+                //         text: "ZHONGLI",
+                //         icon: "/img/resized/zhongli.png"
+                //     },
+                //     {
+                //         id: 8,
+                //         degrees: 40,
+                //         startColor: "6FF78F",
+                //         endColor: "35EF60",
+                //         rings: 3,
+                //         iconFrame: 7,
+                //         iconScale: 0.4,
+                //         text: "VENTI",
+                //         icon: "/img/resized/venti.png"
+                //     },
+                //     {
+                //         id: 9,
+                //         degrees: 60,
+                //         startColor: "000000",
+                //         endColor: "ffff00",
+                //         rings: 3,
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //         sliceTextStyle: {
+                //             fontFamily: "Arial Black",
+                //             fontSize: 24
+                //         },
+                //     }
+                // ],
+
+                slices: [{
+                        id: 1,
+                        degrees: 45,
+                        startColor: "9960FC",
+                        endColor: "6104FF",
+                        rings: 3,
+                        type: "prize",
+                        iconFrame: 0,
+                        iconScale: 0.4,
+                        text: "HOODIE",
+                        sliceText: "HOODIE",
+                        icon: "/img/prize/hudis.png"
                     },
-                }
-            ],
+                    {
+                        id: 2,
+                        degrees: 60,
+                        startColor: "000000",
+                        endColor: "ff4500",
+                        rings: 3,
+                        type: "zonk",
+                        text: "POO :(",
+                        sliceText: "ZONK",
+                    },
+                    {
+                        id: 3,
+                        degrees: 40,
+                        startColor: "58C2FF",
+                        endColor: "00A2FF",
+                        rings: 3,
+                        type: "prize",
+                        iconFrame: 2,
+                        iconScale: 0.4,
+                        text: "T-SHIRT",
+                        sliceText: "T-SHIRT",
+                        icon: "/img/prize/hudis.png"
+                    },
+                    {
+                        id: 4,
+                        degrees: 60,
+                        startColor: "000000",
+                        endColor: "ff4500",
+                        rings: 3,
+                        type: "zonk",
+                        text: "POO :(",
+                        sliceText: "ZONK",
+                    },
+                    {
+                        id: 5,
+                        degrees: 35,
+                        startColor: "65E1FF",
+                        endColor: "00CDFF",
+                        rings: 3,
+                        type: "prize",
+                        iconFrame: 4,
+                        iconScale: 0.4,
+                        text: "MReferral",
+                        sliceText: "MReferral\n5000",
+                        icon: "/img/prize/hudis.png"
+                    },
+                    {
+                        id: 6,
+                        degrees: 35,
+                        startColor: "000000",
+                        endColor: "ff4500",
+                        rings: 3,
+                        type: "zonk",
+                        iconFrame: 5,
+                        iconScale: 0.4,
+                        text: "POO :(",
+                        sliceText: "ZONK",
+                    },
+                    {
+                        id: 7,
+                        degrees: 20,
+                        startColor: "574529",
+                        endColor: "54380E",
+                        rings: 3,
+                        type: "prize",
+                        iconFrame: 6,
+                        iconScale: 0.4,
+                        text: "MPoint 10000",
+                        sliceText: "MPoint\n10000",
+                        icon: "/img/prize/hudis.png"
+                    },
+                    {
+                        id: 8,
+                        degrees: 40,
+                        startColor: "000000",
+                        endColor: "ff4500",
+                        rings: 3,
+                        type: "zonk",
+                        iconFrame: 7,
+                        iconScale: 0.4,
+                        text: "POO :(",
+                        sliceText: "ZONK",
+                    },
+                ],
 
-            // wheel rotation duration range, in milliseconds
-            rotationTimeRange: {
-                min: 4500,
-                max: 4000
-            },
+                // wheel rotation duration range, in milliseconds
+                rotationTimeRange: {
+                    min: 4500,
+                    max: 4000
+                },
 
-            // wheel rounds before it stops
-            wheelRounds: {
-                min: 2,
-                max: 11
-            },
+                // wheel rounds before it stops
+                wheelRounds: {
+                    min: 2,
+                    max: 11
+                },
 
-            // degrees the wheel will rotate in the opposite direction before it stops
-            backSpin: {
-                min: 5,
-                max: 10
-            },
+                // degrees the wheel will rotate in the opposite direction before it stops
+                backSpin: {
+                    min: 3,
+                    max: 5
+                },
 
-            // wheel radius, in pixels
-            wheelRadius: 190,
+                // wheel radius, in pixels
+                wheelRadius: 190,
 
-            // color of stroke lines
-            strokeColor: 0xffffff,
+                // color of stroke lines
+                strokeColor: 0xffffff,
 
-            // width of stroke lines
-            strokeWidth: 3
-        }
+                // width of stroke lines
+                strokeWidth: 3
+            }
 
         // loading pin image
         this.load.image("pin", "/img/pin.png");
 
-        this.load.image('diluc', '/img/diluc.png');
-        this.load.image('ganyu', '/img/ganyu.png');
-        this.load.image('keqing', '/img/keqing.png');
-        this.load.image('monna', '/img/mona.png');
-        this.load.image('qiqi', '/img/qiqi.png');
-        this.load.image('venti', '/img/venti.png');
-        this.load.image('zhongli', '/img/zhongli.png');
-        this.load.image('baal', '/img/baal.png');
+        // this.load.image('diluc', '/img/diluc.png');
+        // this.load.image('ganyu', '/img/ganyu.png');
+        // this.load.image('keqing', '/img/keqing.png');
+        // this.load.image('monna', '/img/mona.png');
+        // this.load.image('qiqi', '/img/qiqi.png');
+        // this.load.image('venti', '/img/venti.png');
+        // this.load.image('zhongli', '/img/zhongli.png');
+        // this.load.image('baal', '/img/baal.png');
 
         for (let i = 0; i < gameOptions.slices.length; i++) {
             if (gameOptions.slices[i].icon != undefined) {
@@ -291,7 +396,8 @@ class playGame extends Phaser.Scene {
                 graphics.fillStyle(ringColorString, 1);
 
                 // drawing the slice
-                graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / gameOptions.slices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees), false);
+                graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / gameOptions.slices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length)), false);
+                // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / gameOptions.slices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees), false);
 
                 // filling the slice
                 graphics.fillPath();
@@ -301,27 +407,30 @@ class playGame extends Phaser.Scene {
             graphics.lineStyle(gameOptions.strokeWidth, gameOptions.strokeColor, 1);
 
             // drawing the biggest slice
-            graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees), false);
+            graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length)), false);
+            // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees), false);
 
             // stroking the slice
             graphics.strokePath();
 
             // add the icon using icon link not spreadsheet
-            if (gameOptions.slices[i].icon != undefined) {
+            // if (gameOptions.slices[i].icon != undefined) {
 
-                // icon image
-                let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), `picture${i}`);
+            //     // icon image
+            //     let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), `picture${i}`);
+            //     // let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), `picture${i}`);
 
-                // scaling the icon according to game preferences
-                icon.scaleX = gameOptions.slices[i].iconScale;
-                icon.scaleY = gameOptions.slices[i].iconScale;
+            //     // scaling the icon according to game preferences
+            //     icon.scaleX = gameOptions.slices[i].iconScale;
+            //     icon.scaleY = gameOptions.slices[i].iconScale;
 
-                // rotating the icon
-                icon.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
+            //     // rotating the icon
+            //     icon.angle = startDegrees + (360 / gameOptions.slices.length) / 2 + 90;
+            //     // icon.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
 
-                // add icon to iconArray
-                iconArray.push(icon);
-            }
+            //     // add icon to iconArray
+            //     iconArray.push(icon);
+            // }
 
             // // add the icon, if any using spreadsheet
             // if (gameOptions.slices[i].iconFrame != undefined) {
@@ -344,13 +453,15 @@ class playGame extends Phaser.Scene {
             if (gameOptions.slices[i].sliceText != undefined) {
 
                 // the text
-                let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.slices[i].sliceText, gameOptions.slices[i].sliceTextStyle);
+                let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), gameOptions.slices[i].sliceText, textStyle);
+                // let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.slices[i].sliceText, gameOptions.slices[i].sliceTextStyle);
 
                 // set text origin to its center
                 text.setOrigin(0.5);
 
                 // set text angle
-                text.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
+                text.angle = startDegrees + (360 / gameOptions.slices.length) / 2 + 90;
+                // text.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
 
                 // stroke text, if required
                 if (gameOptions.slices[i].sliceTextStroke && gameOptions.slices[i].sliceTextStrokeColor) {
@@ -362,7 +473,8 @@ class playGame extends Phaser.Scene {
             }
 
             // updating degrees
-            startDegrees += gameOptions.slices[i].degrees;
+            startDegrees += (360 / gameOptions.slices.length);
+            // startDegrees += gameOptions.slices[i].degrees;
 
         }
 
@@ -433,7 +545,8 @@ class playGame extends Phaser.Scene {
             for (let i = gameOptions.slices.length - 1; i >= 0; i--) {
 
                 // adding current slice angle to prizeDegree
-                prizeDegree += gameOptions.slices[i].degrees;
+                prizeDegree += (360 / gameOptions.slices.length);
+                // prizeDegree += gameOptions.slices[i].degrees;
 
                 // if it's greater than the random angle...
                 if (prizeDegree > degrees - backDegrees) {
@@ -482,10 +595,10 @@ class playGame extends Phaser.Scene {
                             this.wheelContainer.visible = false;
                             this.pin.visible = false
 
-                            if (gameOptions.slices[prize].id != 9) {
+                            if (gameOptions.slices[prize].type != "zonk") {
                                 this.drumSfx.play();
                                 this.yougot.visible = true;
-                                this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `${gameOptions.slices[prize].text.toLowerCase()}`);
+                                this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `picture${prize}`);
                                 this.waifumu.setDisplaySize(200, 450);
                                 this.waifumu.visible = true;
 
@@ -534,8 +647,9 @@ class playGame extends Phaser.Scene {
                     Android.showToast(res2.messege);
                     console.log(res2.messege);
                 } else {
+                    this.spinWheel();
                     ticket = res2.data[0].tiket - 1;
-                    this.spinWheel;
+                    console.log("PUTAR PUTAR");
                 }
             });
         });
