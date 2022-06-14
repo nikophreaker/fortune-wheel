@@ -400,7 +400,7 @@ class playGame extends Phaser.Scene {
         this.canSpin = true;
 
         // waiting for your input, then calling "spinWheel" function
-        this.pin.on("pointerdown", this.spinWheel, this);
+        this.pin.on("pointerdown", this.startTheGame, this);
         // this.input.on("pointerdown", this.spinWheel, this);
     }
 
@@ -518,6 +518,45 @@ class playGame extends Phaser.Scene {
         } else if (ticket < 1) {
             console.log("Out of ticket")
         }
+    }
+
+    startTheGame() {
+        fetch('https://api.msportsid.com/api/game/fortunewheel/start', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`
+            }
+        }).then(res => {
+            res.json().then(res2 => {
+                if (res2.messege != null) {
+                    // promt view to know your ticket insufficient
+                    Android.showToast(res2.messege);
+                    console.log(res2.messege);
+                } else {
+                    ticket = res2.data[0].tiket - 1;
+                    this.spinWheel;
+                }
+            });
+        });
+    }
+
+    claimPrize(idPrize) {
+        fetch('https://api.msportsid.com/api/game/fortunewheel/claim', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`
+            },
+            body: {
+                "reward": idPrize
+            }
+        }).then(res => {
+            res.json().then(res2 => {
+                // response after claim prize
+
+            });
+        });
     }
 
     restartGame() {
