@@ -530,7 +530,7 @@ class playGame extends Phaser.Scene {
     spinWheel() {
         this.random();
         // can we spin the wheel?
-        if (this.canSpin) { //&& ticket >= 1) {
+        if (this.canSpin && ticket >= 1) {
             this.spinSfx.play();
             // resetting text field
             this.prizeText.setText("");
@@ -664,7 +664,7 @@ class playGame extends Phaser.Scene {
             }
         }).then(res => {
             res.json().then(res2 => {
-                if (res2.messege == undefined) {
+                if (res2.messege != undefined) {
                     // promt view to know your ticket insufficient
                     Android.showToast(res2.messege);
                     console.log(res2.messege);
