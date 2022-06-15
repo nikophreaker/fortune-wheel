@@ -528,7 +528,6 @@ class playGame extends Phaser.Scene {
 
     // function to spin the wheel
     spinWheel() {
-        this.random();
         // can we spin the wheel?
         if (this.canSpin && ticket >= 1) {
             this.spinSfx.play();
@@ -700,14 +699,5 @@ class playGame extends Phaser.Scene {
         this.zonkSfx.stop();
         this.scene.restart();
         this
-    }
-
-    random() {
-        var num = Phaser.Math.Between(0, 360); //Math.random();
-        console.log(`YOU GOT ${num}`);
-        // if (num < 0.3) return console.log(`YOU GOT 1`);
-        // else if (num < 0.6) return console.log(`YOU GOT 2`);
-        // else if (num < 0.9) return console.log(`YOU GOT 3`);
-        // else return console.log(`YOU GOT 4`);
     }
 }
