@@ -63,7 +63,7 @@ class playGame extends Phaser.Scene {
 
         textStyle = {
                 fontFamily: "Arial Black",
-                fontSize: 22,
+                fontSize: 12,
                 align: "center"
             },
 
@@ -192,21 +192,15 @@ class playGame extends Phaser.Scene {
                 // ],
 
                 slices: [{
-                        id: 1,
-                        degrees: 45,
                         startColor: "9960FC",
                         endColor: "6104FF",
                         rings: 3,
                         type: "prize",
-                        iconFrame: 0,
-                        iconScale: 0.4,
                         text: "HOODIE",
                         sliceText: "HOODIE",
                         icon: "/img/prize/hudis.png"
                     },
                     {
-                        id: 2,
-                        degrees: 60,
                         startColor: "000000",
                         endColor: "ff4500",
                         rings: 3,
@@ -215,21 +209,15 @@ class playGame extends Phaser.Scene {
                         sliceText: "ZONK",
                     },
                     {
-                        id: 3,
-                        degrees: 40,
                         startColor: "58C2FF",
                         endColor: "00A2FF",
                         rings: 3,
                         type: "prize",
-                        iconFrame: 2,
-                        iconScale: 0.4,
                         text: "T-SHIRT",
                         sliceText: "T-SHIRT",
                         icon: "/img/prize/hudis.png"
                     },
                     {
-                        id: 4,
-                        degrees: 60,
                         startColor: "000000",
                         endColor: "ff4500",
                         rings: 3,
@@ -238,52 +226,70 @@ class playGame extends Phaser.Scene {
                         sliceText: "ZONK",
                     },
                     {
-                        id: 5,
-                        degrees: 35,
                         startColor: "65E1FF",
                         endColor: "00CDFF",
                         rings: 3,
                         type: "prize",
-                        iconFrame: 4,
-                        iconScale: 0.4,
-                        text: "MReferral",
+                        text: "MReferral 5000",
                         sliceText: "MReferral\n5000",
                         icon: "/img/prize/hudis.png"
                     },
                     {
-                        id: 6,
-                        degrees: 35,
                         startColor: "000000",
                         endColor: "ff4500",
                         rings: 3,
                         type: "zonk",
-                        iconFrame: 5,
-                        iconScale: 0.4,
                         text: "POO :(",
                         sliceText: "ZONK",
                     },
                     {
-                        id: 7,
-                        degrees: 20,
                         startColor: "574529",
                         endColor: "54380E",
                         rings: 3,
                         type: "prize",
-                        iconFrame: 6,
-                        iconScale: 0.4,
                         text: "MPoint 10000",
                         sliceText: "MPoint\n10000",
                         icon: "/img/prize/hudis.png"
                     },
                     {
-                        id: 8,
-                        degrees: 40,
                         startColor: "000000",
                         endColor: "ff4500",
                         rings: 3,
                         type: "zonk",
-                        iconFrame: 7,
-                        iconScale: 0.4,
+                        text: "POO :(",
+                        sliceText: "ZONK",
+                    },
+                    {
+                        startColor: "574529",
+                        endColor: "54380E",
+                        rings: 3,
+                        type: "prize",
+                        text: "MPoint 1000",
+                        sliceText: "MPoint\n1000",
+                        icon: "/img/prize/hudis.png"
+                    },
+                    {
+                        startColor: "000000",
+                        endColor: "ff4500",
+                        rings: 3,
+                        type: "zonk",
+                        text: "POO :(",
+                        sliceText: "ZONK",
+                    },
+                    {
+                        startColor: "574529",
+                        endColor: "54380E",
+                        rings: 3,
+                        type: "prize",
+                        text: "MReferral 500",
+                        sliceText: "MReferral\n500",
+                        icon: "/img/prize/hudis.png"
+                    },
+                    {
+                        startColor: "000000",
+                        endColor: "ff4500",
+                        rings: 3,
+                        type: "zonk",
                         text: "POO :(",
                         sliceText: "ZONK",
                     },
@@ -303,8 +309,8 @@ class playGame extends Phaser.Scene {
 
                 // degrees the wheel will rotate in the opposite direction before it stops
                 backSpin: {
-                    min: 3,
-                    max: 5
+                    min: 1,
+                    max: 2
                 },
 
                 // wheel radius, in pixels
@@ -314,7 +320,7 @@ class playGame extends Phaser.Scene {
                 strokeColor: 0xffffff,
 
                 // width of stroke lines
-                strokeWidth: 3
+                strokeWidth: 2
             }
 
         // loading pin image
@@ -522,9 +528,9 @@ class playGame extends Phaser.Scene {
 
     // function to spin the wheel
     spinWheel() {
-
+        this.random();
         // can we spin the wheel?
-        if (this.canSpin && ticket >= 1) {
+        if (this.canSpin) { //&& ticket >= 1) {
             this.spinSfx.play();
             // resetting text field
             this.prizeText.setText("");
@@ -532,8 +538,21 @@ class playGame extends Phaser.Scene {
             // the wheel will spin round for some times. This is just coreography
             let rounds = Phaser.Math.Between(gameOptions.wheelRounds.min, gameOptions.wheelRounds.max);
 
+            // get degree per slice 
+            let sliceDegrees = 360 / gameOptions.slices.length;
+            let slicesLength = gameOptions.slices.length;
+
             // then will rotate by a random number from 0 to 360 degrees. This is the actual spin
-            let degrees = Phaser.Math.Between(0, 360);
+            let randDegrees = Phaser.Math.Between(0, 360);
+            let degrees =
+                ((randDegrees >= (sliceDegrees * (slicesLength - 1))) && (randDegrees <= (sliceDegrees * slicesLength))) ||
+                ((randDegrees >= (sliceDegrees * (slicesLength - 3))) && (randDegrees <= (sliceDegrees * (slicesLength - 2)))) ||
+                ((randDegrees >= (sliceDegrees * (slicesLength - 5))) && (randDegrees <= (sliceDegrees * (slicesLength - 4)))) ||
+                ((randDegrees >= (sliceDegrees * (slicesLength - 7))) && (randDegrees <= (sliceDegrees * (slicesLength - 6)))) ?
+                Phaser.Math.Between(0, 150) : randDegrees;
+
+            console.log(`randDegrees GET = ${randDegrees}`);
+            console.log(`DEGREES GET = ${degrees}`);
 
             // then will rotate back by a random amount of degrees
             let backDegrees = Phaser.Math.Between(gameOptions.backSpin.min, gameOptions.backSpin.max);
@@ -546,12 +565,15 @@ class playGame extends Phaser.Scene {
 
                 // adding current slice angle to prizeDegree
                 prizeDegree += (360 / gameOptions.slices.length);
+                console.log(`PRIZESSSS DEGREE = ${prizeDegree}`);
                 // prizeDegree += gameOptions.slices[i].degrees;
 
                 // if it's greater than the random angle...
                 if (prizeDegree > degrees - backDegrees) {
 
                     // we found the prize
+                    console.log(`CONGRATS YOU GOT ${i}`);
+                    console.log(`CONGRATS YOU GOT2 ${gameOptions.slices[i].text}`);
                     var prize = i;
                     break;
                 }
@@ -642,7 +664,7 @@ class playGame extends Phaser.Scene {
             }
         }).then(res => {
             res.json().then(res2 => {
-                if (res2.messege != undefined) {
+                if (res2.messege == undefined) {
                     // promt view to know your ticket insufficient
                     Android.showToast(res2.messege);
                     console.log(res2.messege);
@@ -678,5 +700,14 @@ class playGame extends Phaser.Scene {
         this.zonkSfx.stop();
         this.scene.restart();
         this
+    }
+
+    random() {
+        var num = Phaser.Math.Between(0, 360); //Math.random();
+        console.log(`YOU GOT ${num}`);
+        // if (num < 0.3) return console.log(`YOU GOT 1`);
+        // else if (num < 0.6) return console.log(`YOU GOT 2`);
+        // else if (num < 0.9) return console.log(`YOU GOT 3`);
+        // else return console.log(`YOU GOT 4`);
     }
 }
