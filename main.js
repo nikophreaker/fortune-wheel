@@ -63,7 +63,8 @@ class playGame extends Phaser.Scene {
 
         textStyle = {
                 fontFamily: "Arial Black",
-                fontSize: 14 * window.devicePixelRatio,
+                fontSize: 12 * window.devicePixelRatio,
+                fontStyle: "normal",
                 align: "center"
             },
 
@@ -314,7 +315,7 @@ class playGame extends Phaser.Scene {
                 },
 
                 // wheel radius, in pixels
-                wheelRadius: 190 * window.devicePixelRatio,
+                wheelRadius: 150 * window.devicePixelRatio,
 
                 // color of stroke lines
                 strokeColor: 0xffffff,
