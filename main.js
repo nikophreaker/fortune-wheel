@@ -63,7 +63,7 @@ class playGame extends Phaser.Scene {
 
         textStyle = {
                 fontFamily: "Arial Black",
-                fontSize: 12,
+                fontSize: 14 * window.devicePixelRatio,
                 align: "center"
             },
 
@@ -314,17 +314,14 @@ class playGame extends Phaser.Scene {
                 },
 
                 // wheel radius, in pixels
-                wheelRadius: 190,
+                wheelRadius: 190 * window.devicePixelRatio,
 
                 // color of stroke lines
                 strokeColor: 0xffffff,
 
                 // width of stroke lines
-                strokeWidth: 2
+                strokeWidth: 2 * window.devicePixelRatio
             }
-
-        // loading pin image
-        this.load.image("pin", "/img/pin.png");
 
         // this.load.image('diluc', '/img/diluc.png');
         // this.load.image('ganyu', '/img/ganyu.png');
@@ -341,6 +338,9 @@ class playGame extends Phaser.Scene {
             }
         }
 
+        // loading pin image
+        this.load.image("pin", "/img/pin.png");
+
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
@@ -348,10 +348,10 @@ class playGame extends Phaser.Scene {
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3')
         // loading icons spritesheet
-        this.load.spritesheet("icons", "/img/spritesheet.png", {
-            frameWidth: 200,
-            frameHeight: 200
-        });
+        // this.load.spritesheet("icons", "/img/spritesheet.png", {
+        //     frameWidth: 200,
+        //     frameHeight: 200
+        // });
 
     }
 
@@ -365,7 +365,11 @@ class playGame extends Phaser.Scene {
         this.yougot.visible = false;
         this.restart = this.add.sprite(400, 170, 'restart').setScale(0.30);
         this.restart.visible = false;
-        this.showTicket = this.add.text(20, 20, `Current Ticket: ${ticket}`);
+        this.showTicket = this.add.text(20, 20, `Current Ticket: ${ticket}`, {
+            fontSize: 20 * window.devicePixelRatio,
+            fontStyle: "bold",
+            fontFamily: "Arial Black"
+        });
         this.showTicket.visible = true;
         // starting degrees
         let startDegrees = -90;
@@ -498,6 +502,8 @@ class playGame extends Phaser.Scene {
 
         // adding the pin in the middle of the canvas
         this.pin = this.add.sprite(game.config.width / 2, game.config.height / 2, "pin");
+        this.pin.displayWidth = 150 * window.devicePixelRatio;
+        this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.pin.setInteractive();
 
         // this.pin.on('pointerdown', function (pointer) {
