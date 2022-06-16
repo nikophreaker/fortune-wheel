@@ -16,8 +16,8 @@ window.onload = function () {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
-            width: window.innerWidth,
-            height: window.innerHeight
+            width: window.innerWidth * window.devicePixelRatio,
+            height: window.innerHeight * window.devicePixelRatio
         },
 
         // game background color
