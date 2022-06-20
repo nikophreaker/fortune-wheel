@@ -199,7 +199,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "HOODIE",
                         sliceText: "HOODIE",
-                        icon: "/img/prize/hudis.png"
+                        icon: "./img/prize/hudis.png"
                     },
                     {
                         startColor: "000000",
@@ -216,7 +216,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "T-SHIRT",
                         sliceText: "T-SHIRT",
-                        icon: "/img/prize/hudis.png"
+                        icon: "./img/prize/hudis.png"
                     },
                     {
                         startColor: "000000",
@@ -233,7 +233,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MReferral 5000",
                         sliceText: "MReferral\n5000",
-                        icon: "/img/prize/hudis.png"
+                        icon: "./img/prize/hudis.png"
                     },
                     {
                         startColor: "000000",
@@ -250,7 +250,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MPoint 10000",
                         sliceText: "MPoint\n10000",
-                        icon: "/img/prize/hudis.png"
+                        icon: "./img/prize/hudis.png"
                     },
                     {
                         startColor: "000000",
@@ -267,7 +267,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MPoint 1000",
                         sliceText: "MPoint\n1000",
-                        icon: "/img/prize/hudis.png"
+                        icon: "./img/prize/hudis.png"
                     },
                     {
                         startColor: "000000",
@@ -284,7 +284,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MReferral 500",
                         sliceText: "MReferral\n500",
-                        icon: "/img/prize/hudis.png"
+                        icon: "./img/prize/hudis.png"
                     },
                     {
                         startColor: "000000",
@@ -340,7 +340,9 @@ class playGame extends Phaser.Scene {
         }
 
         // loading pin image
-        this.load.image("pin", "/img/pin.png");
+        this.load.image("pin", "./img/pin.png");
+        this.load.image("circle", "./img/circle.png");
+        this.load.image("outer", "./img/outer.png")
 
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
@@ -502,9 +504,15 @@ class playGame extends Phaser.Scene {
         this.wheelContainer.add(iconArray);
 
         // adding the pin in the middle of the canvas
+        this.circle = this.add.sprite(game.config.width / 2, game.config.height / 2, "circle");
         this.pin = this.add.sprite(game.config.width / 2, game.config.height / 2, "pin");
+        this.outer = this.add.sprite(game.config.width / 2, game.config.height / 2, "outer");
         this.pin.displayWidth = 150 * window.devicePixelRatio;
         this.pin.displayHeight = 150 * window.devicePixelRatio;
+        this.circle.displayWidth = 500 * window.devicePixelRatio;
+        this.circle.displayHeight = 500 * window.devicePixelRatio;
+        this.outer.displayWidth = 600 * window.devicePixelRatio;
+        this.outer.displayHeight = 600 * window.devicePixelRatio;
         this.pin.setInteractive();
 
         // this.pin.on('pointerdown', function (pointer) {
