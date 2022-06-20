@@ -511,8 +511,8 @@ class playGame extends Phaser.Scene {
         this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.circle.displayWidth = 500 * window.devicePixelRatio;
         this.circle.displayHeight = 500 * window.devicePixelRatio;
-        this.outer.displayWidth = 600 * window.devicePixelRatio;
-        this.outer.displayHeight = 600 * window.devicePixelRatio;
+        this.outer.displayWidth = 630 * window.devicePixelRatio;
+        this.outer.displayHeight = 630 * window.devicePixelRatio;
         this.pin.setInteractive();
 
         // this.pin.on('pointerdown', function (pointer) {
@@ -629,7 +629,9 @@ class playGame extends Phaser.Scene {
                             // displaying prize text
                             this.prizeText.setText(gameOptions.slices[prize].text);
                             this.wheelContainer.visible = false;
-                            this.pin.visible = false
+                            this.pin.visible = false;
+                            this.circle.visible = false;
+                            this.outer.visible = false;
 
                             if (gameOptions.slices[prize].type != "zonk") {
                                 this.drumSfx.play();
