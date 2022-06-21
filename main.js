@@ -1,6 +1,7 @@
 // the game itself
 let game;
 var ticket;
+var userpull;
 
 let gameOptions;
 let textStyle;
@@ -56,6 +57,22 @@ class playGame extends Phaser.Scene {
                 // const value = `Name: ${res2.posts.id}`
                 ticket = res2.data[0].tiket;
                 console.log(res2.data[0].tiket)
+            })
+        }).catch(err => {
+            console.log(err)
+        });
+
+        fetch('https://api.msportsid.com/api/game/history_today', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`
+            }
+        }).then(res => {
+            res.json().then(res2 => {
+                // const value = `Name: ${res2.posts.id}`
+                userpull = res2;
+                console.log(`User's Pull : ${res2}`)
             })
         }).catch(err => {
             console.log(err)
@@ -558,13 +575,13 @@ class playGame extends Phaser.Scene {
 
             // then will rotate by a random number from 0 to 360 degrees. This is the actual spin
             let randDegrees = Phaser.Math.Between(0, 360);
+            let grandPrize = [350, 290, 250, 165]
             let degrees =
                 ((randDegrees >= (sliceDegrees * (slicesLength - 1))) && (randDegrees <= (sliceDegrees * slicesLength))) ||
                 ((randDegrees >= (sliceDegrees * (slicesLength - 3))) && (randDegrees <= (sliceDegrees * (slicesLength - 2)))) ||
                 ((randDegrees >= (sliceDegrees * (slicesLength - 5))) && (randDegrees <= (sliceDegrees * (slicesLength - 4)))) ||
                 ((randDegrees >= (sliceDegrees * (slicesLength - 7))) && (randDegrees <= (sliceDegrees * (slicesLength - 6)))) ?
-                Phaser.Math.Between(0, 150) : randDegrees;
-
+                userpull % 50 == 0 ? grandPrize[Math.floor(Math.random() * grandPrize.length)] : Phaser.Math.Between(0, 150) : userpull % 50 == 0 ? grandPrize[Math.floor(Math.random() * grandPrize.length)] : randDegrees;
             console.log(`randDegrees GET = ${randDegrees}`);
             console.log(`DEGREES GET = ${degrees}`);
 
