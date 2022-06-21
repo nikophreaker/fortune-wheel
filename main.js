@@ -233,7 +233,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MReferral 5000",
                         sliceText: "MReferral\n5000",
-                        icon: "./img/prize/hudis.png"
+                        // icon: "./img/prize/mreferral.png"
                     },
                     {
                         startColor: "000000",
@@ -250,7 +250,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MPoint 10000",
                         sliceText: "MPoint\n10000",
-                        icon: "./img/prize/hudis.png"
+                        // icon: "./img/prize/mpoints.png"
                     },
                     {
                         startColor: "000000",
@@ -267,7 +267,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MPoint 1000",
                         sliceText: "MPoint\n1000",
-                        icon: "./img/prize/hudis.png"
+                        // icon: "./img/prize/mpoints.png"
                     },
                     {
                         startColor: "000000",
@@ -284,7 +284,7 @@ class playGame extends Phaser.Scene {
                         type: "prize",
                         text: "MReferral 500",
                         sliceText: "MReferral\n500",
-                        icon: "./img/prize/hudis.png"
+                        // icon: "./img/prize/mreferral.png"
                     },
                     {
                         startColor: "000000",
@@ -342,7 +342,7 @@ class playGame extends Phaser.Scene {
         // loading pin image
         this.load.image("pin", "./img/pin.png");
         this.load.image("circle", "./img/circle.png");
-        this.load.image("outer", "./img/outer.png")
+        this.load.image("outer", "./img/outer.png");
 
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
@@ -636,25 +636,30 @@ class playGame extends Phaser.Scene {
                             if (gameOptions.slices[prize].type != "zonk") {
                                 this.drumSfx.play();
                                 this.yougot.visible = true;
-                                this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `picture${prize}`);
-                                this.waifumu.setDisplaySize(200, 450);
-                                this.waifumu.visible = true;
+                                if (gameOptions.slices[prize].icon != undefined) {
+                                    this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `picture${prize}`);
+                                    this.waifumu.setDisplaySize(300, 350);
+                                    this.waifumu.visible = true;
+                                }
 
-                                this.add.text(10, this.cameras.main.centerY, `You got ${gameOptions.slices[prize].text}! Congrats :D`, {
-                                    fontSize: '40px',
-                                    fontFamily: 'Arial',
+                                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got \n ${gameOptions.slices[prize].text}! \n Congrats :D`, {
+                                    fontSize: '24px',
+                                    fontFamily: 'Arial Black',
                                     color: 'red',
-                                    backgroundColor: 'transparent'
-                                });
+                                    backgroundColor: 'transparent',
+                                    align: 'center'
+                                }).setOrigin(0.5);
+
+
 
                             } else {
                                 this.zonkSfx.play();
-                                this.add.text(10, this.cameras.main.centerY, `You got zonk, sorry... XD`, {
-                                    fontSize: '40px',
-                                    fontFamily: 'Arial',
+                                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got zonk...`, {
+                                    fontSize: '24px',
+                                    fontFamily: 'Arial Black',
                                     color: 'red',
                                     backgroundColor: 'transparent'
-                                });
+                                }).setOrigin(0.5);
 
                             }
 
