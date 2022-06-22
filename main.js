@@ -2,6 +2,7 @@
 let game;
 var ticket;
 var userpull;
+var getSlices = [];
 
 let gameOptions;
 let textStyle;
@@ -46,6 +47,53 @@ class playGame extends Phaser.Scene {
     // method to be executed when the scene preloads
     preload() {
 
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect((window.innerWidth * window.devicePixelRatio / 2) - (320 / 2), window.innerHeight * window.devicePixelRatio / 2, 320, 50);
+
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        var textLoading = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: 'Loading...',
+            style: {
+                fontFamily: 'Arial Black',
+                fontSize: 12 * window.devicePixelRatio,
+                fill: '#ffffff'
+            }
+        });
+
+        var precentText = this.make.text({
+            x: width / 2,
+            y: height / 2 + 5,
+            text: '0%',
+            style: {
+                fontFamily: 'Arial Black',
+                fontSize: 12 * window.devicePixelRatio,
+                fill: '#ffffff'
+            }
+        });
+
+        textLoading.setOrigin(0.5, 0.5);
+        precentText.setOrigin(0.5, 0.5);
+
+        this.load.on('progress', function (value) {
+            progressBar.clear();
+            precentText.setText(parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(((window.innerWidth * window.devicePixelRatio / 2) - (300 / 2)), (window.innerHeight * window.devicePixelRatio / 2) + 10, 300 * value, 30);
+        });
+
+        this.load.on('complete', function (value) {
+            progressBar.destroy();
+            progressBox.destroy();
+            textLoading.destroy();
+            precentText.destroy();
+        });
+
         fetch('https://api.msportsid.com/api/game/tiket', {
             method: 'get',
             headers: {
@@ -54,12 +102,11 @@ class playGame extends Phaser.Scene {
             }
         }).then(res => {
             res.json().then(res2 => {
-                // const value = `Name: ${res2.posts.id}`
                 ticket = res2.data[0].tiket;
-                console.log(res2.data[0].tiket)
+                console.log(`User's Ticket : ${ticket}`);
             })
         }).catch(err => {
-            console.log(err)
+            console.log(err);
         });
 
         fetch('https://api.msportsid.com/api/game/history_today', {
@@ -72,10 +119,37 @@ class playGame extends Phaser.Scene {
             res.json().then(res2 => {
                 // const value = `Name: ${res2.posts.id}`
                 userpull = res2;
-                console.log(`User's Pull : ${res2}`)
+                console.log(`User's Pull : ${res2}`);
             })
         }).catch(err => {
-            console.log(err)
+            console.log(err);
+        });
+
+        fetch('https://api.msportsid.com/api/game/fortunewheel', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`
+            }
+        }).then(res => {
+            res.json().then(res2 => {
+                // ticket = res2.data_tiket[0].tiket;
+                res2.data_game.forEach(element => {
+                    let data = {
+                        startColor: element.start_color,
+                        endColor: element.end_color,
+                        rings: 3,
+                        type: element.text,
+                        text: element.text,
+                        sliceText: element.text,
+                        icon: element.icon
+                    }
+                    getSlices.push(data);
+                });
+                console.log(getSlices.length);
+            });
+        }).catch(err => {
+            console.log(err);
         });
 
         textStyle = {
@@ -209,126 +283,127 @@ class playGame extends Phaser.Scene {
                 //     }
                 // ],
 
-                slices: [{
-                        startColor: "9960FC",
-                        endColor: "6104FF",
-                        rings: 3,
-                        type: "prize",
-                        text: "HOODIE",
-                        sliceText: "HOODIE",
-                        icon: "./img/prize/hudis.png"
-                    },
-                    {
-                        startColor: "000000",
-                        endColor: "ff4500",
-                        rings: 3,
-                        type: "zonk",
-                        text: "POO :(",
-                        sliceText: "ZONK",
-                    },
-                    {
-                        startColor: "58C2FF",
-                        endColor: "00A2FF",
-                        rings: 3,
-                        type: "prize",
-                        text: "T-SHIRT",
-                        sliceText: "T-SHIRT",
-                        icon: "./img/prize/hudis.png"
-                    },
-                    {
-                        startColor: "000000",
-                        endColor: "ff4500",
-                        rings: 3,
-                        type: "zonk",
-                        text: "POO :(",
-                        sliceText: "ZONK",
-                    },
-                    {
-                        startColor: "65E1FF",
-                        endColor: "00CDFF",
-                        rings: 3,
-                        type: "prize",
-                        text: "MReferral 5000",
-                        sliceText: "MReferral\n5000",
-                        // icon: "./img/prize/mreferral.png"
-                    },
-                    {
-                        startColor: "000000",
-                        endColor: "ff4500",
-                        rings: 3,
-                        type: "zonk",
-                        text: "POO :(",
-                        sliceText: "ZONK",
-                    },
-                    {
-                        startColor: "574529",
-                        endColor: "54380E",
-                        rings: 3,
-                        type: "prize",
-                        text: "MPoint 10000",
-                        sliceText: "MPoint\n10000",
-                        // icon: "./img/prize/mpoints.png"
-                    },
-                    {
-                        startColor: "000000",
-                        endColor: "ff4500",
-                        rings: 3,
-                        type: "zonk",
-                        text: "POO :(",
-                        sliceText: "ZONK",
-                    },
-                    {
-                        startColor: "574529",
-                        endColor: "54380E",
-                        rings: 3,
-                        type: "prize",
-                        text: "MPoint 1000",
-                        sliceText: "MPoint\n1000",
-                        // icon: "./img/prize/mpoints.png"
-                    },
-                    {
-                        startColor: "000000",
-                        endColor: "ff4500",
-                        rings: 3,
-                        type: "zonk",
-                        text: "POO :(",
-                        sliceText: "ZONK",
-                    },
-                    {
-                        startColor: "574529",
-                        endColor: "54380E",
-                        rings: 3,
-                        type: "prize",
-                        text: "MReferral 500",
-                        sliceText: "MReferral\n500",
-                        // icon: "./img/prize/mreferral.png"
-                    },
-                    {
-                        startColor: "000000",
-                        endColor: "ff4500",
-                        rings: 3,
-                        type: "zonk",
-                        text: "POO :(",
-                        sliceText: "ZONK",
-                    },
-                ],
+                // slices: [{
+                //         startColor: "9960FC",
+                //         endColor: "6104FF",
+                //         rings: 3,
+                //         type: "prize",
+                //         text: "HOODIE",
+                //         sliceText: "HOODIE",
+                //         icon: "./img/prize/hudis.png"
+                //     },
+                //     {
+                //         startColor: "000000",
+                //         endColor: "ff4500",
+                //         rings: 3,
+                //         type: "zonk",
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //     },
+                //     {
+                //         startColor: "58C2FF",
+                //         endColor: "00A2FF",
+                //         rings: 3,
+                //         type: "prize",
+                //         text: "T-SHIRT",
+                //         sliceText: "T-SHIRT",
+                //         icon: "./img/prize/hudis.png"
+                //     },
+                //     {
+                //         startColor: "000000",
+                //         endColor: "ff4500",
+                //         rings: 3,
+                //         type: "zonk",
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //     },
+                //     {
+                //         startColor: "65E1FF",
+                //         endColor: "00CDFF",
+                //         rings: 3,
+                //         type: "prize",
+                //         text: "MReferral 5000",
+                //         sliceText: "MReferral\n5000",
+                //         // icon: "./img/prize/mreferral.png"
+                //     },
+                //     {
+                //         startColor: "000000",
+                //         endColor: "ff4500",
+                //         rings: 3,
+                //         type: "zonk",
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //     },
+                //     {
+                //         startColor: "574529",
+                //         endColor: "54380E",
+                //         rings: 3,
+                //         type: "prize",
+                //         text: "MPoint 10000",
+                //         sliceText: "MPoint\n10000",
+                //         // icon: "./img/prize/mpoints.png"
+                //     },
+                //     {
+                //         startColor: "000000",
+                //         endColor: "ff4500",
+                //         rings: 3,
+                //         type: "zonk",
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //     },
+                //     {
+                //         startColor: "574529",
+                //         endColor: "54380E",
+                //         rings: 3,
+                //         type: "prize",
+                //         text: "MPoint 1000",
+                //         sliceText: "MPoint\n1000",
+                //         // icon: "./img/prize/mpoints.png"
+                //     },
+                //     {
+                //         startColor: "000000",
+                //         endColor: "ff4500",
+                //         rings: 3,
+                //         type: "zonk",
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //     },
+                //     {
+                //         startColor: "574529",
+                //         endColor: "54380E",
+                //         rings: 3,
+                //         type: "prize",
+                //         text: "MReferral 500",
+                //         sliceText: "MReferral\n500",
+                //         // icon: "./img/prize/mreferral.png"
+                //     },
+                //     {
+                //         startColor: "000000",
+                //         endColor: "ff4500",
+                //         rings: 3,
+                //         type: "zonk",
+                //         text: "POO :(",
+                //         sliceText: "ZONK",
+                //     },
+                // ],
+                // slices: [],
 
                 // wheel rotation duration range, in milliseconds
                 rotationTimeRange: {
-                    min: 4500,
-                    max: 4000
+                    min: 1500,
+                    max: 2000
                 },
 
                 // wheel rounds before it stops
                 wheelRounds: {
-                    min: 2,
-                    max: 11
+                    min: 4,
+                    max: 9
                 },
 
                 // degrees the wheel will rotate in the opposite direction before it stops
                 backSpin: {
-                    min: 1,
-                    max: 2
+                    min: 0,
+                    max: 0
                 },
 
                 // wheel radius, in pixels
@@ -338,9 +413,9 @@ class playGame extends Phaser.Scene {
                 strokeColor: 0xffffff,
 
                 // width of stroke lines
-                strokeWidth: 2 * window.devicePixelRatio
+                strokeWidth: 1.5 * window.devicePixelRatio
             }
-
+        // getSlices = getSlices;
         // this.load.image('diluc', '/img/diluc.png');
         // this.load.image('ganyu', '/img/ganyu.png');
         // this.load.image('keqing', '/img/keqing.png');
@@ -350,9 +425,9 @@ class playGame extends Phaser.Scene {
         // this.load.image('zhongli', '/img/zhongli.png');
         // this.load.image('baal', '/img/baal.png');
 
-        for (let i = 0; i < gameOptions.slices.length; i++) {
-            if (gameOptions.slices[i].icon != undefined) {
-                this.load.image(`picture${i}`, gameOptions.slices[i].icon);
+        for (let i = 0; i < getSlices.length; i++) {
+            if (getSlices[i].icon != undefined) {
+                this.load.image(`picture${i}`, getSlices[i].icon);
             }
         }
 
@@ -366,7 +441,7 @@ class playGame extends Phaser.Scene {
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
-        this.load.audio('spin', './sounds/spinsound.mp3')
+        this.load.audio('spin', './sounds/spinsound.mp3');
         // loading icons spritesheet
         // this.load.spritesheet("icons", "/img/spritesheet.png", {
         //     frameWidth: 200,
@@ -408,16 +483,16 @@ class playGame extends Phaser.Scene {
         let iconArray = [];
 
         // looping through each slice
-        for (let i = 0; i < gameOptions.slices.length; i++) {
+        for (let i = 0; i < getSlices.length; i++) {
 
             // converting colors from 0xRRGGBB format to Color objects
-            let startColor = Phaser.Display.Color.ValueToColor(gameOptions.slices[i].startColor);
-            let endColor = Phaser.Display.Color.ValueToColor(gameOptions.slices[i].endColor)
+            let startColor = Phaser.Display.Color.ValueToColor(getSlices[i].startColor);
+            let endColor = Phaser.Display.Color.ValueToColor(getSlices[i].endColor)
 
-            for (let j = gameOptions.slices[i].rings; j > 0; j--) {
+            for (let j = getSlices[i].rings; j > 0; j--) {
 
                 // interpolate colors
-                let ringColor = Phaser.Display.Color.Interpolate.ColorWithColor(startColor, endColor, gameOptions.slices[i].rings, j);
+                let ringColor = Phaser.Display.Color.Interpolate.ColorWithColor(startColor, endColor, getSlices[i].rings, j);
 
                 // converting the interpolated color to 0xRRGGBB format
                 let ringColorString = Phaser.Display.Color.RGBToString(Math.round(ringColor.r), Math.round(ringColor.g), Math.round(ringColor.b), 0, "0x");
@@ -426,8 +501,8 @@ class playGame extends Phaser.Scene {
                 graphics.fillStyle(ringColorString, 1);
 
                 // drawing the slice
-                graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / gameOptions.slices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length)), false);
-                // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / gameOptions.slices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees), false);
+                graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / getSlices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length)), false);
+                // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / getSlices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees), false);
 
                 // filling the slice
                 graphics.fillPath();
@@ -437,65 +512,65 @@ class playGame extends Phaser.Scene {
             graphics.lineStyle(gameOptions.strokeWidth, gameOptions.strokeColor, 1);
 
             // drawing the biggest slice
-            graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length)), false);
-            // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees), false);
+            graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length)), false);
+            // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees), false);
 
             // stroking the slice
             graphics.strokePath();
 
             // add the icon using icon link not spreadsheet
-            // if (gameOptions.slices[i].icon != undefined) {
+            // if (getSlices[i].icon != undefined) {
 
             //     // icon image
-            //     let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), `picture${i}`);
-            //     // let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), `picture${i}`);
+            //     let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), `picture${i}`);
+            //     // let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), `picture${i}`);
 
             //     // scaling the icon according to game preferences
-            //     icon.scaleX = gameOptions.slices[i].iconScale;
-            //     icon.scaleY = gameOptions.slices[i].iconScale;
+            //     icon.scaleX = getSlices[i].iconScale;
+            //     icon.scaleY = getSlices[i].iconScale;
 
             //     // rotating the icon
-            //     icon.angle = startDegrees + (360 / gameOptions.slices.length) / 2 + 90;
-            //     // icon.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
+            //     icon.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
+            //     // icon.angle = startDegrees + getSlices[i].degrees / 2 + 90;
 
             //     // add icon to iconArray
             //     iconArray.push(icon);
             // }
 
             // // add the icon, if any using spreadsheet
-            // if (gameOptions.slices[i].iconFrame != undefined) {
+            // if (getSlices[i].iconFrame != undefined) {
 
             //     // icon image
-            //     let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), 'icons', gameOptions.slices[i].iconFrame);
+            //     let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), 'icons', getSlices[i].iconFrame);
 
             //     // scaling the icon according to game preferences
-            //     icon.scaleX = gameOptions.slices[i].iconScale;
-            //     icon.scaleY = gameOptions.slices[i].iconScale;
+            //     icon.scaleX = getSlices[i].iconScale;
+            //     icon.scaleY = getSlices[i].iconScale;
 
             //     // rotating the icon
-            //     icon.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
+            //     icon.angle = startDegrees + getSlices[i].degrees / 2 + 90;
 
             //     // add icon to iconArray
             //     iconArray.push(icon);
             // }
 
             // add slice text, if any
-            if (gameOptions.slices[i].sliceText != undefined) {
+            if (getSlices[i].sliceText != undefined) {
 
                 // the text
-                let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / gameOptions.slices.length) / 2)), gameOptions.slices[i].sliceText, textStyle);
-                // let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + gameOptions.slices[i].degrees / 2)), gameOptions.slices[i].sliceText, gameOptions.slices[i].sliceTextStyle);
+                let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), getSlices[i].sliceText, textStyle);
+                // let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), getSlices[i].sliceText, getSlices[i].sliceTextStyle);
 
                 // set text origin to its center
                 text.setOrigin(0.5);
 
                 // set text angle
-                text.angle = startDegrees + (360 / gameOptions.slices.length) / 2 + 90;
-                // text.angle = startDegrees + gameOptions.slices[i].degrees / 2 + 90;
+                text.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
+                // text.angle = startDegrees + getSlices[i].degrees / 2 + 90;
 
                 // stroke text, if required
-                if (gameOptions.slices[i].sliceTextStroke && gameOptions.slices[i].sliceTextStrokeColor) {
-                    text.setStroke(gameOptions.slices[i].sliceTextStrokeColor, gameOptions.slices[i].sliceTextStroke);
+                if (getSlices[i].sliceTextStroke && getSlices[i].sliceTextStrokeColor) {
+                    text.setStroke(getSlices[i].sliceTextStrokeColor, getSlices[i].sliceTextStroke);
                 }
 
                 // add text to iconArray
@@ -503,8 +578,8 @@ class playGame extends Phaser.Scene {
             }
 
             // updating degrees
-            startDegrees += (360 / gameOptions.slices.length);
-            // startDegrees += gameOptions.slices[i].degrees;
+            startDegrees += (360 / getSlices.length);
+            // startDegrees += getSlices[i].degrees;
 
         }
 
@@ -570,8 +645,8 @@ class playGame extends Phaser.Scene {
             let rounds = Phaser.Math.Between(gameOptions.wheelRounds.min, gameOptions.wheelRounds.max);
 
             // get degree per slice 
-            let sliceDegrees = 360 / gameOptions.slices.length;
-            let slicesLength = gameOptions.slices.length;
+            let sliceDegrees = 360 / getSlices.length;
+            let slicesLength = getSlices.length;
 
             // then will rotate by a random number from 0 to 360 degrees. This is the actual spin
             let randDegrees = Phaser.Math.Between(0, 360);
@@ -592,19 +667,19 @@ class playGame extends Phaser.Scene {
             let prizeDegree = 0;
 
             // looping through slices
-            for (let i = gameOptions.slices.length - 1; i >= 0; i--) {
+            for (let i = getSlices.length - 1; i >= 0; i--) {
 
                 // adding current slice angle to prizeDegree
-                prizeDegree += (360 / gameOptions.slices.length);
+                prizeDegree += (360 / getSlices.length);
                 console.log(`PRIZESSSS DEGREE = ${prizeDegree}`);
-                // prizeDegree += gameOptions.slices[i].degrees;
+                // prizeDegree += getSlices[i].degrees;
 
                 // if it's greater than the random angle...
                 if (prizeDegree > degrees - backDegrees) {
 
                     // we found the prize
                     console.log(`CONGRATS YOU GOT ${i}`);
-                    console.log(`CONGRATS YOU GOT2 ${gameOptions.slices[i].text}`);
+                    console.log(`CONGRATS YOU GOT2 ${getSlices[i].text}`);
                     var prize = i;
                     break;
                 }
@@ -634,6 +709,7 @@ class playGame extends Phaser.Scene {
 
                 // function to be executed once the tween has been completed
                 onComplete: function (tween) {
+                    this.spinSfx.stop();
                     // another tween to rotate a bit in the opposite direction
                     this.tweens.add({
                         targets: [this.wheelContainer],
@@ -642,25 +718,24 @@ class playGame extends Phaser.Scene {
                         ease: "Cubic.easeIn",
                         callbackScope: this,
                         onComplete: function (tween) {
-                            this.spinSfx.stop();
                             // displaying prize text
-                            this.prizeText.setText(gameOptions.slices[prize].text);
+                            this.prizeText.setText(getSlices[prize].text);
                             this.wheelContainer.visible = false;
                             this.pin.visible = false;
                             this.circle.visible = false;
                             this.outer.visible = false;
 
-                            if (gameOptions.slices[prize].type != "zonk") {
+                            if (getSlices[prize].type != "zonk") {
                                 this.drumSfx.play();
                                 this.yougot.visible = true;
-                                if (gameOptions.slices[prize].icon != undefined) {
+                                if (getSlices[prize].icon != undefined) {
                                     this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `picture${prize}`);
                                     this.waifumu.setDisplaySize(300, 350);
                                     this.waifumu.visible = true;
                                 }
 
-                                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got \n ${gameOptions.slices[prize].text}! \n Congrats :D`, {
-                                    fontSize: '24px',
+                                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got \n ${getSlices[prize].text}! \n Congrats :D`, {
+                                    fontSize: 24 * window.devicePixelRatio,
                                     fontFamily: 'Arial Black',
                                     color: 'red',
                                     backgroundColor: 'transparent',
@@ -672,7 +747,7 @@ class playGame extends Phaser.Scene {
                             } else {
                                 this.zonkSfx.play();
                                 this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got zonk...`, {
-                                    fontSize: '24px',
+                                    fontSize: 24 * window.devicePixelRatio,
                                     fontFamily: 'Arial Black',
                                     color: 'red',
                                     backgroundColor: 'transparent'
