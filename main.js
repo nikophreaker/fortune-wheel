@@ -3,6 +3,8 @@ let game;
 var ticket;
 var userpull;
 var getSlices = [];
+var first = true;
+var inresult = false;
 
 let gameOptions;
 let textStyle;
@@ -467,6 +469,13 @@ class playGame extends Phaser.Scene {
             fontFamily: "Arial Black"
         });
         this.showTicket.visible = true;
+
+        // this.createSpin();
+
+
+    }
+
+    createSpin() {
         // starting degrees
         let startDegrees = -90;
 
@@ -627,11 +636,20 @@ class playGame extends Phaser.Scene {
 
         // waiting for your input, then calling "spinWheel" function
         this.pin.on("pointerdown", this.startTheGame, this);
-        // this.input.on("pointerdown", this.spinWheel, this);
+        // // this.input.on("pointerdown", this.spinWheel, this);)
+        // if (getSlices.length == 0) {
+        //     var container = document.getElementById("thegame");
+        //     var content = container.innerHTML;
+        //     container.innerHTML = content;
+        // }
     }
 
     update() {
         this.showTicket.setText(`Current Ticket: ${ticket}`);
+        if (getSlices.length != 0 && first) {
+            first = false;
+            this.createSpin();
+        }
     }
 
     // function to spin the wheel
@@ -814,5 +832,6 @@ class playGame extends Phaser.Scene {
         this.zonkSfx.stop();
         this.scene.restart();
         this
+        first = true;
     }
 }
