@@ -442,6 +442,7 @@ class playGame extends Phaser.Scene {
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3');
+
         // loading icons spritesheet
         // this.load.spritesheet("icons", "/img/spritesheet.png", {
         //     frameWidth: 200,
@@ -487,7 +488,7 @@ class playGame extends Phaser.Scene {
 
             // converting colors from 0xRRGGBB format to Color objects
             let startColor = Phaser.Display.Color.ValueToColor(getSlices[i].startColor);
-            let endColor = Phaser.Display.Color.ValueToColor(getSlices[i].endColor)
+            let endColor = Phaser.Display.Color.ValueToColor(getSlices[i].endColor);
 
             for (let j = getSlices[i].rings; j > 0; j--) {
 
