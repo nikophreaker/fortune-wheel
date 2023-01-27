@@ -261,11 +261,11 @@ class playGame extends Phaser.Scene {
         // });
 
         textStyle = {
-            fontFamily: "Arial Black",
-            fontSize: 12 * window.devicePixelRatio,
-            fontStyle: "normal",
-            align: "center"
-        },
+                fontFamily: "Arial Black",
+                fontSize: 12 * window.devicePixelRatio,
+                fontStyle: "normal",
+                align: "center"
+            },
 
             // setting gameOptions
             gameOptions = {
@@ -292,7 +292,7 @@ class playGame extends Phaser.Scene {
                 wheelRadius: 200 * window.devicePixelRatio,
 
                 // color of stroke lines
-                strokeColor: 0x3D3D3D,//0xffffff,
+                strokeColor: 0x3D3D3D, //0xffffff,
 
                 // width of stroke lines
                 strokeWidth: 1.5 * window.devicePixelRatio
@@ -476,8 +476,8 @@ class playGame extends Phaser.Scene {
                 // console.log("test");
                 // console.log(icon);
                 // scaling the icon according to game preferences
-                icon.scaleX = 0.2;//getSlices[i].iconScale;
-                icon.scaleY = 0.2;//getSlices[i].iconScale;
+                icon.scaleX = 0.1 * dpr; //getSlices[i].iconScale;
+                icon.scaleY = 0.1 * dpr; //getSlices[i].iconScale;
 
                 // rotating the icon
                 icon.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
@@ -646,7 +646,7 @@ class playGame extends Phaser.Scene {
                 angle: 360 * rounds + degrees,
 
                 // tween duration
-                duration: 11000,//Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
+                duration: 11000, //Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
 
                 // tween easing
                 ease: "Cubic.easeOut",
@@ -659,7 +659,7 @@ class playGame extends Phaser.Scene {
                     // another tween to rotate a bit in the opposite direction
                     this.tweens.add({
                         targets: [this.wheelContainer],
-                        angle: this.wheelContainer.angle,//- backDegrees,
+                        angle: this.wheelContainer.angle, //- backDegrees,
                         duration: 0,
                         ease: "Cubic.easeOut",
                         callbackScope: this,
@@ -678,6 +678,7 @@ class playGame extends Phaser.Scene {
                                 this.yougot.visible = true;
                                 if (getSlices[prize].icon != undefined) {
                                     this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `pictures${prize + 1}`);
+                                    this.waifumu.setScale(0.2 * dpr);
                                     // this.waifumu.setDisplaySize(300, 350);
                                     this.waifumu.visible = true;
                                 }
