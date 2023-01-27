@@ -53,6 +53,7 @@ let game;
 var ticket;
 var userpull;
 var getSlices = [];
+var sliceSize = [];
 var first = true;
 var inresult = false;
 
@@ -278,7 +279,7 @@ class playGame extends Phaser.Scene {
 
                 // wheel rounds before it stops
                 wheelRounds: {
-                    min: 4,
+                    min: 7,
                     max: 9
                 },
 
@@ -410,6 +411,8 @@ class playGame extends Phaser.Scene {
 
         // array which will contain all icons
         let iconArray = [];
+        // set precenttage
+        let setsat = [80, 70, 50, 0, 0, 20, 0, 0];
 
         // looping through each slice
         for (let i = 0; i < getSlices.length; i++) {
@@ -431,6 +434,13 @@ class playGame extends Phaser.Scene {
 
                 // drawing the slice
                 graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / getSlices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length)), false);
+
+                let slice = {
+                    startAngle: startDegrees + 90,
+                    endAngle: (startDegrees + 90) + (360 / getSlices.length),
+                    precentage: setsat[i],
+                }
+                sliceSize.push(slice);
                 // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / getSlices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees), false);
 
                 // filling the slice
@@ -593,9 +603,34 @@ class playGame extends Phaser.Scene {
             let slicesLength = getSlices.length;
 
             // then will rotate by a random number from 0 to 360 degrees. This is the actual spin
-            let randDegrees = Phaser.Math.Between(0, 360);
+            // let randDegrees = Phaser.Math.Between(0, 360);
             let grandPrize = [350, 290, 250, 165];
-            let degrees = Math.floor(Math.random() * 360);
+            // let degrees = Math.floor(Math.random() * 360);
+
+            // algorithm for precentage
+            var array = [];
+            for (var i = 0; i < sliceSize.length; i++) {
+                var item = sliceSize[i];
+                var chance = sliceSize[i].precentage / 10;
+                for (var j = 0; j < chance; j++) {
+                    array.push(item);
+                }
+            }
+            var idx = Math.floor(Math.random() * array.length);
+            console.log(array);
+            let randDegrees = Phaser.Math.Between(array[idx].startAngle, array[idx].endAngle - 1);
+            console.log(randDegrees);
+            // let degrees = Phaser.Math.Between(array[idx].startAngle, array[idx].endAngle);
+            // let degrees = Math.floor(Math.random() * array[idx].endAngle);
+
+            // console.log(setsat[Math.floor(Math.random() * setsat.length)]);
+            sliceSize.forEach((el, idx) => {
+                console.log(el);
+                // if (el.startAngle <= ((setsat[idx] / 100) * 360) && el.endAngle > ((setsat[idx] / 100) * 360)) {
+                //     console.log(setsat[idx]);
+                //     randDegrees = Phaser.Math.Between(el.startAngle, el.endAngle);
+                // }
+            });
             // let degrees =
             //     ((randDegrees >= (sliceDegrees * (slicesLength - 1))) && (randDegrees <= (sliceDegrees * slicesLength))) ||
             //         ((randDegrees >= (sliceDegrees * (slicesLength - 3))) && (randDegrees <= (sliceDegrees * (slicesLength - 2)))) ||
@@ -603,7 +638,7 @@ class playGame extends Phaser.Scene {
             //         ((randDegrees >= (sliceDegrees * (slicesLength - 7))) && (randDegrees <= (sliceDegrees * (slicesLength - 6)))) ?
             //         userpull % 50 == 0 ? grandPrize[Math.floor(Math.random() * grandPrize.length)] : Phaser.Math.Between(0, 150) : userpull % 50 == 0 ? grandPrize[Math.floor(Math.random() * grandPrize.length)] : randDegrees;
             console.log(`randDegrees GET = ${randDegrees}`);
-            console.log(`DEGREES GET = ${degrees}`);
+            // console.log(`DEGREES GET = ${degrees}`);
 
             // then will rotate back by a random amount of degrees
             let backDegrees = Phaser.Math.Between(gameOptions.backSpin.min, gameOptions.backSpin.max);
@@ -612,7 +647,8 @@ class playGame extends Phaser.Scene {
             let prizeDegree = 0;
 
             // looping through slices
-            for (let i = getSlices.length - 1; i >= 0; i--) {
+            for (let i = 0; i <= getSlices.length - 1; i++) {
+                // for (let i = getSlices.length - 1; i >= 0; i--) {
 
                 // adding current slice angle to prizeDegree
                 prizeDegree += (360 / getSlices.length);
@@ -620,7 +656,8 @@ class playGame extends Phaser.Scene {
                 // prizeDegree += getSlices[i].degrees;
 
                 // if it's greater than the random angle...
-                if (prizeDegree > degrees - backDegrees) {
+                if (prizeDegree > randDegrees) {
+                    // if (prizeDegree > degrees - backDegrees) {
 
                     // we found the prize
                     console.log(`CONGRATS YOU GOT ${i}`);
@@ -643,7 +680,7 @@ class playGame extends Phaser.Scene {
                 targets: [this.wheelContainer],
 
                 // angle destination
-                angle: 360 * rounds + degrees,
+                angle: 360 * rounds - randDegrees,
 
                 // tween duration
                 duration: 11000, //Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
