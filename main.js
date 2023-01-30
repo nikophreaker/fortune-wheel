@@ -6,10 +6,17 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
 import {
     getDatabase,
-    ref,
     child,
     get
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+import {
+    uploadString,
+    getStorage,
+    uploadBytes,
+    uploadBytesResumable,
+    ref,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
 import {
     getFirestore,
     query,
@@ -892,12 +899,62 @@ class playGame extends Phaser.Scene {
         }
     }
 
+    exportCanvasAsPNG(fileName, dataUrl) {
+        // var canvasElement = document.getElementById(id);
+        var MIME_TYPE = "image/png";
+        var imgURL = dataUrl;
+        var dlLink = document.createElement('a');
+        dlLink.download = fileName;
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+
+        // Data URL string
+        var time = Date.now().toString();
+        const storage = getStorage();
+        const storageRef = ref(storage, `ssPrize/${time}.png`);
+        uploadString(storageRef, imgURL, 'data_url').then((snapshot) => {
+            console.log('Uploaded a data_url string!');
+            console.log(snapshot.ref);
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+            });
+        });
+        // uploadTask.on('state_changed',
+        //     (snapshot) => {
+        //         // Observe state change events such as progress, pause, and resume
+        //         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //         console.log('Upload is ' + progress + '% done');
+        //         switch (snapshot.state) {
+        //             case 'paused':
+        //                 console.log('Upload is paused');
+        //                 break;
+        //             case 'running':
+        //                 console.log('Upload is running');
+        //                 break;
+        //         }
+        //     },
+        //     (error) => {
+        //         // Handle unsuccessful uploads
+        //     },
+        //     () => {
+        //         // Handle successful uploads on complete
+        //         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        //         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        //             console.log('File available at', downloadURL);
+        //         });
+        //     }
+        // );
+    }
+
     claimPrize(idPrize, kode) {
         // Build formData object.
         let formData = new FormData();
         formData.append('reward', `${idPrize}`);
         console.log(`Reward id: ${idPrize}`);
-        var msg;
         this.game.renderer.snapshot(function (image) {
             image.style.width = '160px';
             image.style.height = '120px';
@@ -905,18 +962,29 @@ class playGame extends Phaser.Scene {
             console.log('snap!');
             document.body.appendChild(image);
             console.log(image);
-            msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* ${image.src}`;
+            // scene.exportCanvasAsPNG('snapshot', image.src);
+            // Data URL string
+            var time = Date.now().toString();
+            const storage = getStorage();
+            const storageRef = ref(storage, `ssPrize/${time}.png`);
+            uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
+                console.log('Uploaded a data_url string!');
+                console.log(snapshot.ref);
+                getDownloadURL(snapshot.ref).then((downloadURL) => {
+                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n${downloadURL}`;
+                    var url = 'whatsapp://send?phone=+6281288522088&text=' + encodeURIComponent(msg);
+
+                    var s = window.open(url, '_blank');
+
+                    if (s && s.focus) {
+                        s.focus();
+                    }
+                    else if (!s) {
+                        window.location.href = url;
+                    }
+                });
+            });
         });
-        var url = 'whatsapp://send?phone=+6281288522088&text=' + encodeURIComponent(msg);
-
-        var s = window.open(url, '_blank');
-
-        if (s && s.focus) {
-            s.focus();
-        }
-        else if (!s) {
-            window.location.href = url;
-        }
         // fetch('https://api.msportsid.com/api/game/fortunewheel/claim', {
         //     method: 'post',
         //     headers: {
