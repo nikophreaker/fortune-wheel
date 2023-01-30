@@ -107,7 +107,7 @@ class playGame extends Phaser.Scene {
     }
 
     init() {
-        dpr = window.devicePixelRatio;
+        dpr = 1.5;//window.devicePixelRatio;
         scaleSprite = this.scaleWithRatioPixel(0);
 
         window.mobileCheck = function () {
