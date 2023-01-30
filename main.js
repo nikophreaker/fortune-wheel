@@ -899,7 +899,7 @@ class playGame extends Phaser.Scene {
         console.log(`Reward id: ${idPrize}`);
         var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}*`;
 
-        var url = 'https://api.whatsapp.com/send?phone=+6285891225823&text=' + encodeURIComponent(msg);
+        var url = 'whatsapp://send?phone=+6285891225823&text=' + encodeURIComponent(msg);
 
         var s = window.open(url, '_blank');
 
