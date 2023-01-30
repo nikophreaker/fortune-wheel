@@ -633,8 +633,13 @@ class playGame extends Phaser.Scene {
 
     // function to spin the wheel
     async spinWheel() {
+
         // can we spin the wheel?
-        if (this.canSpin && ticket >= 1) {
+        if (this.canSpin) {
+
+            // now the wheel cannot spin because it's already spinning
+            this.canSpin = false;
+
             this.spinSfx.play();
             // resetting text field
             this.prizeText.setText("");
@@ -744,21 +749,16 @@ class playGame extends Phaser.Scene {
                     var tampilWaktu = "Jam: " + jam + ":" + menit + ":" + detik;
                     console.log(tampilTanggal);
                     console.log(tampilWaktu);
-                    if (this.canSpin) {
-                        // Add a new document in collection "cities"
-                        await addDoc(collection(db, "prizespinwheel"), {
-                            kupon: "Los Angeles",
-                            prize: getSlices[i].text,
-                            tanggal: tampilTanggal,
-                            waktu: tampilWaktu
-                        });
-                    }
+                    // Add a new document in collection "cities"
+                    await addDoc(collection(db, "prizespinwheel"), {
+                        kupon: "Los Angeles",
+                        prize: getSlices[i].text,
+                        tanggal: tampilTanggal,
+                        waktu: tampilWaktu
+                    });
                     break;
                 }
             }
-
-            // now the wheel cannot spin because it's already spinning
-            this.canSpin = false;
 
             //initiate scene
             let worlds = this;
@@ -859,8 +859,6 @@ class playGame extends Phaser.Scene {
                     })
                 }
             });
-        } else if (ticket < 1) {
-            console.log("Out of ticket")
         }
     }
 
