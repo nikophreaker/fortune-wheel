@@ -325,6 +325,7 @@ class playGame extends Phaser.Scene {
         this.load.image("circle", "./img/circle.png");
         this.load.image("outer", "./img/outer.png");
         this.load.image("bg", "./img/bg.jpg");
+        this.load.image("button", "./img/button_sprite_sheet.png");
         this.load.image("pictures1", "./img/prize/prize1.png");
         this.load.image("pictures2", "./img/prize/prize2.png");
         this.load.image("pictures3", "./img/prize/prize3.png");
@@ -405,12 +406,12 @@ class playGame extends Phaser.Scene {
         // element.on('click', function (event) {
 
         //     if (event.target.name === 'okButton') {
-        //         var inputKode = scene.getChildByName('kode');
+        //         var inputKode = element.getChildByName('kode');
 
         //         //  Have they entered anything?
         //         if (inputKode.value !== '') {
         //             //  Turn off the click events
-        //             scene.removeListener('click');
+        //             element.removeListener('click');
 
         //             //  Tween the login form out
         //             scene.tweens.add({ targets: element.rotate3d, x: 1, w: 90, duration: 3000, ease: 'Power3' });
@@ -421,9 +422,6 @@ class playGame extends Phaser.Scene {
         //                     element.setVisible(false);
         //                 }
         //             });
-
-        //             //  Populate the text with whatever they typed in as the username!
-        //             text.setText('Welcome ' + inputUsername.value);
         //         }
         //         else {
         //             //  Flash the prompt
@@ -756,6 +754,19 @@ class playGame extends Phaser.Scene {
                                     this.waifumu.setScale(0.2 * dpr);
                                     // this.waifumu.setDisplaySize(300, 350);
                                     this.waifumu.visible = true;
+                                    this.claimButton = this.add.sprite(this.waifumu.x, this.waifumu.y + 20, 'button');
+                                    this.claimButton.setInteractive();
+                                    this.claimButton.on("pointerover", function () {
+                                        console.log('button over');
+                                    });
+                                    this.claimButton.on("pointerout", function () {
+                                        console.log('button out');
+                                    });
+                                    this.claimButton.on("pointerdown", function () {
+                                        console.log('button down');
+                                        worlds.claimPrize(prize, "AZ4K4")
+
+                                    });
                                 }
 
                                 // this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got \n ${getSlices[prize].text}! \n Congrats :D`, {
@@ -790,7 +801,7 @@ class playGame extends Phaser.Scene {
                             // this.restart.visible = true;
                             // player can spin again
                             this.canSpin = false;
-                            this.input.on("pointerdown", this.restartGame, this);
+                            // this.input.on("pointerdown", this.restartGame, this);
                         }
                     })
                 }
@@ -835,25 +846,37 @@ class playGame extends Phaser.Scene {
         }
     }
 
-    claimPrize(idPrize) {
+    claimPrize(idPrize, kode) {
         // Build formData object.
         let formData = new FormData();
         formData.append('reward', `${idPrize}`);
-        console.log(`Rewardid: ${idPrize}`);
-        fetch('https://api.msportsid.com/api/game/fortunewheel/claim', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${userToken}`
-            },
-            body: formData
-        }).then(res => {
-            res.json().then(res2 => {
-                // response after claim prize
+        console.log(`Reward id: ${idPrize}`);
+        var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}*`;
 
-                console.log(res2);
-            });
-        });
+        var url = 'https://wa.me/+6281288522088?text=' + encodeURIComponent(msg);
+
+        var s = window.open(url, '_blank');
+
+        if (s && s.focus) {
+            s.focus();
+        }
+        else if (!s) {
+            window.location.href = url;
+        }
+        // fetch('https://api.msportsid.com/api/game/fortunewheel/claim', {
+        //     method: 'post',
+        //     headers: {
+        //         'Content-Type': 'multipart/form-data',
+        //         'Authorization': `Bearer ${userToken}`
+        //     },
+        //     body: formData
+        // }).then(res => {
+        //     res.json().then(res2 => {
+        //         // response after claim prize
+
+        //         console.log(res2);
+        //     });
+        // });
     }
 
     restartGame() {
