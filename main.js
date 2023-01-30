@@ -325,7 +325,7 @@ class playGame extends Phaser.Scene {
         this.load.image("circle", "./img/circle.png");
         this.load.image("outer", "./img/outer.png");
         this.load.image("bg", "./img/bg.jpg");
-        this.load.image("button", "./img/button_sprite_sheet.png");
+        this.load.image("button", "./img/claim.png");
         this.load.image("pictures1", "./img/prize/prize1.png");
         this.load.image("pictures2", "./img/prize/prize2.png");
         this.load.image("pictures3", "./img/prize/prize3.png");
@@ -754,7 +754,7 @@ class playGame extends Phaser.Scene {
                                     this.waifumu.setScale(0.2 * dpr);
                                     // this.waifumu.setDisplaySize(300, 350);
                                     this.waifumu.visible = true;
-                                    this.claimButton = this.add.sprite(this.waifumu.x, this.waifumu.y + 20, 'button');
+                                    this.claimButton = this.add.sprite(this.waifumu.x, this.waifumu.y + 350, 'button');
                                     this.claimButton.setInteractive();
                                     this.claimButton.on("pointerover", function () {
                                         console.log('button over');
@@ -765,7 +765,6 @@ class playGame extends Phaser.Scene {
                                     this.claimButton.on("pointerdown", function () {
                                         console.log('button down');
                                         worlds.claimPrize(prize, "AZ4K4")
-
                                     });
                                 }
 
