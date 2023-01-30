@@ -47,6 +47,7 @@ const database = getDatabase(app);
 // Initialize Firestore Database and get document
 const db = getFirestore(app);
 const colRef = collection(db, "luckyspin");
+const colRef2 = collection(db, "kupon");
 
 // the game itself
 let game;
@@ -76,7 +77,9 @@ window.onload = function () {
             width: window.innerWidth * window.devicePixelRatio,
             height: window.innerHeight * window.devicePixelRatio
         },
-
+        dom: {
+            createContainer: true
+        },
         // game background color
         // backgroundColor: 0x560000,
 
@@ -107,7 +110,7 @@ class playGame extends Phaser.Scene {
     }
 
     init() {
-        dpr = 1.5;//window.devicePixelRatio;
+        dpr = window.devicePixelRatio;
         scaleSprite = this.scaleWithRatioPixel(0);
 
         window.mobileCheck = function () {
@@ -292,7 +295,7 @@ class playGame extends Phaser.Scene {
                 },
 
                 // wheel radius, in pixels
-                wheelRadius: 200 * 1.5,
+                wheelRadius: 200 * window.devicePixelRatio,
 
                 // color of stroke lines
                 strokeColor: 0x3D3D3D, //0xffffff,
@@ -317,6 +320,7 @@ class playGame extends Phaser.Scene {
         // }
 
         // loading pin image
+        this.load.html("inputKupon", "./inputkupon.html");
         this.load.image("pin", "./img/pin.png");
         this.load.image("circle", "./img/circle.png");
         this.load.image("outer", "./img/outer.png");
@@ -347,8 +351,8 @@ class playGame extends Phaser.Scene {
 
     // method to be executed once the scene has been created
     async create() {
-        // this.scale.displaySize.setAspectRatio(width / height);
-        // this.scale.refresh();
+        this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
+        this.scale.refresh();
         const cameraWidth = this.cameras.main.width;
         const cameraHeight = this.cameras.main.height;
         const bg = this.add.image(0, 0, "bg").setOrigin(0);
@@ -392,8 +396,42 @@ class playGame extends Phaser.Scene {
             fontFamily: "Arial Black"
         });
         this.showTicket.visible = true;
+        // var element = this.add.dom(this.gameWidth / 2, this.gameHeight / 2).createFromCache('inputKupon');
+        // var scene = this;
+        // element.setPerspective(800 * dpr);
 
-        // this.createSpin();
+        // element.addListener('click');
+
+        // element.on('click', function (event) {
+
+        //     if (event.target.name === 'okButton') {
+        //         var inputKode = scene.getChildByName('kode');
+
+        //         //  Have they entered anything?
+        //         if (inputKode.value !== '') {
+        //             //  Turn off the click events
+        //             scene.removeListener('click');
+
+        //             //  Tween the login form out
+        //             scene.tweens.add({ targets: element.rotate3d, x: 1, w: 90, duration: 3000, ease: 'Power3' });
+
+        //             scene.tweens.add({
+        //                 targets: element, scaleX: 2, scaleY: 2, y: 700, duration: 3000, ease: 'Power3',
+        //                 onComplete: function () {
+        //                     element.setVisible(false);
+        //                 }
+        //             });
+
+        //             //  Populate the text with whatever they typed in as the username!
+        //             text.setText('Welcome ' + inputUsername.value);
+        //         }
+        //         else {
+        //             //  Flash the prompt
+        //             scene.tweens.add({ targets: text, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
+        //         }
+        //     }
+
+        // });
 
     }
 
@@ -486,8 +524,8 @@ class playGame extends Phaser.Scene {
                 // console.log("test");
                 // console.log(icon);
                 // scaling the icon according to game preferences
-                icon.scaleX = 0.1 * 1.5; //getSlices[i].iconScale;
-                icon.scaleY = 0.1 * 1.5; //getSlices[i].iconScale;
+                icon.scaleX = 0.1 * window.devicePixelRatio; //getSlices[i].iconScale;
+                icon.scaleY = 0.1 * window.devicePixelRatio; //getSlices[i].iconScale;
 
                 // rotating the icon
                 icon.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
@@ -546,8 +584,8 @@ class playGame extends Phaser.Scene {
         this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.circle.displayWidth = 500 * window.devicePixelRatio;
         this.circle.displayHeight = 500 * window.devicePixelRatio;
-        this.outer.displayWidth = 460 * 1.5;
-        this.outer.displayHeight = 460 * 1.5;
+        this.outer.displayWidth = 460 * window.devicePixelRatio;
+        this.outer.displayHeight = 460 * window.devicePixelRatio;
         this.pin.setInteractive();
 
         // this.pin.on('pointerdown', function (pointer) {
@@ -568,7 +606,7 @@ class playGame extends Phaser.Scene {
         this.canSpin = true;
 
         // waiting for your input, then calling "spinWheel" function
-        this.pin.on("pointerdown", this.startTheGame, this);
+        this.pin.on("pointerdown", this.spinWheel, this);
         // // this.input.on("pointerdown", this.spinWheel, this);)
         // if (getSlices.length == 0) {
         //     var container = document.getElementById("thegame");
@@ -762,7 +800,7 @@ class playGame extends Phaser.Scene {
         }
     }
 
-    startTheGame() {
+    async startTheGame(kode) {
         // fetch('https://api.msportsid.com/api/game/fortunewheel/start', {
         //     method: 'get',
         //     headers: {
@@ -782,7 +820,16 @@ class playGame extends Phaser.Scene {
         //         }
         //     });
         // });
-        this.spinWheel();
+
+        // GET KODE DATA
+        const q = query(colRef2, where("kode", "==", kode));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            let data = doc.data();
+            this.createSpin();
+            // this.spinWheel();
+            console.log(data);
+        });
         if (ticket != undefined) {
             ticket = ticket - 1
         }
