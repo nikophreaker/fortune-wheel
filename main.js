@@ -78,7 +78,9 @@ window.onload = function () {
         },
 
         // game background color
-        backgroundColor: 0x560000,
+        // backgroundColor: 0x560000,
+
+        transparent: true,
 
         // scenes used by the game
         scene: [playGame]
@@ -262,11 +264,11 @@ class playGame extends Phaser.Scene {
         // });
 
         textStyle = {
-                fontFamily: "Arial Black",
-                fontSize: 12 * window.devicePixelRatio,
-                fontStyle: "normal",
-                align: "center"
-            },
+            fontFamily: "Arial Black",
+            fontSize: 12 * window.devicePixelRatio,
+            fontStyle: "normal",
+            align: "center"
+        },
 
             // setting gameOptions
             gameOptions = {
@@ -290,7 +292,7 @@ class playGame extends Phaser.Scene {
                 },
 
                 // wheel radius, in pixels
-                wheelRadius: 200 * window.devicePixelRatio,
+                wheelRadius: 200 * 1.5,
 
                 // color of stroke lines
                 strokeColor: 0x3D3D3D, //0xffffff,
@@ -345,17 +347,16 @@ class playGame extends Phaser.Scene {
 
     // method to be executed once the scene has been created
     async create() {
-        const cameraWidth = this.cameras.main.width
-        const cameraHeight = this.cameras.main.height
+        // this.scale.displaySize.setAspectRatio(width / height);
+        // this.scale.refresh();
+        const cameraWidth = this.cameras.main.width;
+        const cameraHeight = this.cameras.main.height;
         const bg = this.add.image(0, 0, "bg").setOrigin(0);
         bg.setScale(Math.max(cameraWidth / bg.width, cameraHeight / bg.height));
 
         // GET LEADERBOARD DATA (Highest Score)
         const q = query(colRef, orderBy("id", "asc"));
         const querySnapshot = await getDocs(q);
-        var rowWidth = 0;
-        var rank = 1;
-        var userInHighest = false;
         querySnapshot.forEach((doc) => {
             let data = doc.data();
             let datas = {
@@ -366,7 +367,8 @@ class playGame extends Phaser.Scene {
                 type: data.type,
                 text: data.text,
                 sliceText: data.sliceText,
-                icon: data.icon
+                icon: data.icon,
+                percentage: data.percentage
             }
             getSlices.push(datas);
             console.log(datas);
@@ -411,8 +413,6 @@ class playGame extends Phaser.Scene {
 
         // array which will contain all icons
         let iconArray = [];
-        // set precenttage
-        let setsat = [80, 70, 50, 0, 0, 20, 0, 0];
 
         // looping through each slice
         for (let i = 0; i < getSlices.length; i++) {
@@ -438,7 +438,7 @@ class playGame extends Phaser.Scene {
                 let slice = {
                     startAngle: startDegrees + 90,
                     endAngle: (startDegrees + 90) + (360 / getSlices.length),
-                    precentage: setsat[i],
+                    precentage: getSlices[i].percentage,
                 }
                 sliceSize.push(slice);
                 // graphics.slice(gameOptions.wheelRadius + gameOptions.strokeWidth, gameOptions.wheelRadius + gameOptions.strokeWidth, j * gameOptions.wheelRadius / getSlices[i].rings, Phaser.Math.DegToRad(startDegrees), Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees), false);
@@ -486,8 +486,8 @@ class playGame extends Phaser.Scene {
                 // console.log("test");
                 // console.log(icon);
                 // scaling the icon according to game preferences
-                icon.scaleX = 0.1 * dpr; //getSlices[i].iconScale;
-                icon.scaleY = 0.1 * dpr; //getSlices[i].iconScale;
+                icon.scaleX = 0.1 * 1.5; //getSlices[i].iconScale;
+                icon.scaleY = 0.1 * 1.5; //getSlices[i].iconScale;
 
                 // rotating the icon
                 icon.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
@@ -546,8 +546,8 @@ class playGame extends Phaser.Scene {
         this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.circle.displayWidth = 500 * window.devicePixelRatio;
         this.circle.displayHeight = 500 * window.devicePixelRatio;
-        this.outer.displayWidth = 460 * window.devicePixelRatio;
-        this.outer.displayHeight = 460 * window.devicePixelRatio;
+        this.outer.displayWidth = 460 * 1.5;
+        this.outer.displayHeight = 460 * 1.5;
         this.pin.setInteractive();
 
         // this.pin.on('pointerdown', function (pointer) {
