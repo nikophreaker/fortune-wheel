@@ -897,8 +897,16 @@ class playGame extends Phaser.Scene {
         let formData = new FormData();
         formData.append('reward', `${idPrize}`);
         console.log(`Reward id: ${idPrize}`);
-        var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}*`;
-
+        var msg;
+        this.game.renderer.snapshot(function (image) {
+            image.style.width = '160px';
+            image.style.height = '120px';
+            image.style.paddingLeft = '2px';
+            console.log('snap!');
+            document.body.appendChild(image);
+            console.log(image);
+            msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* ${image.src}`;
+        });
         var url = 'whatsapp://send?phone=+6281288522088&text=' + encodeURIComponent(msg);
 
         var s = window.open(url, '_blank');
