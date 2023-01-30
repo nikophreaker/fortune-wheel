@@ -969,8 +969,8 @@ class playGame extends Phaser.Scene {
                 console.log('Uploaded a data_url string!');
                 console.log(snapshot.ref);
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
-                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n${downloadURL}`;
-                    var url = 'whatsapp://send?phone=+6281288522088&text=' + encodeURIComponent(msg);
+                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
+                    var url = 'whatsapp://send?phone=6281288522088&text=' + encodeURIComponent(msg);
 
                     var s = window.open(url, '_blank');
 
