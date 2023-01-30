@@ -15,6 +15,7 @@ import {
     query,
     collection,
     doc,
+    addDoc,
     setDoc,
     getDoc,
     getDocs,
@@ -624,7 +625,7 @@ class playGame extends Phaser.Scene {
     }
 
     // function to spin the wheel
-    spinWheel() {
+    async spinWheel() {
         // can we spin the wheel?
         if (this.canSpin && ticket >= 1) {
             this.spinSfx.play();
@@ -677,7 +678,7 @@ class playGame extends Phaser.Scene {
             // console.log(`DEGREES GET = ${degrees}`);
 
             // then will rotate back by a random amount of degrees
-            let backDegrees = Phaser.Math.Between(gameOptions.backSpin.min, gameOptions.backSpin.max);
+            // let backDegrees = Phaser.Math.Between(gameOptions.backSpin.min, gameOptions.backSpin.max);
 
             // before the wheel ends spinning, we already know the prize
             let prizeDegree = 0;
@@ -699,6 +700,52 @@ class playGame extends Phaser.Scene {
                     console.log(`CONGRATS YOU GOT ${i}`);
                     console.log(`CONGRATS YOU GOT2 ${getSlices[i].text}`);
                     var prize = i;
+
+                    // dapatkan waktu dalam indonesia
+                    var date = new Date();
+                    var tahun = date.getFullYear();
+                    var bulan = date.getMonth();
+                    var tanggal = date.getDate();
+                    var hari = date.getDay();
+                    var jam = date.getHours();
+                    var menit = date.getMinutes();
+                    var detik = date.getSeconds();
+                    switch (hari) {
+                        case 0: hari = "Minggu"; break;
+                        case 1: hari = "Senin"; break;
+                        case 2: hari = "Selasa"; break;
+                        case 3: hari = "Rabu"; break;
+                        case 4: hari = "Kamis"; break;
+                        case 5: hari = "Jum'at"; break;
+                        case 6: hari = "Sabtu"; break;
+                    }
+                    switch (bulan) {
+                        case 0: bulan = "Januari"; break;
+                        case 1: bulan = "Februari"; break;
+                        case 2: bulan = "Maret"; break;
+                        case 3: bulan = "April"; break;
+                        case 4: bulan = "Mei"; break;
+                        case 5: bulan = "Juni"; break;
+                        case 6: bulan = "Juli"; break;
+                        case 7: bulan = "Agustus"; break;
+                        case 8: bulan = "September"; break;
+                        case 9: bulan = "Oktober"; break;
+                        case 10: bulan = "November"; break;
+                        case 11: bulan = "Desember"; break;
+                    }
+                    var tampilTanggal = "Tanggal: " + hari + ", " + tanggal + " " + bulan + " " + tahun;
+                    var tampilWaktu = "Jam: " + jam + ":" + menit + ":" + detik;
+                    console.log(tampilTanggal);
+                    console.log(tampilWaktu);
+                    if (this.canSpin) {
+                        // Add a new document in collection "cities"
+                        await addDoc(collection(db, "prizespinwheel"), {
+                            kupon: "Los Angeles",
+                            prize: getSlices[i].text,
+                            tanggal: tampilTanggal,
+                            waktu: tampilWaktu
+                        });
+                    }
                     break;
                 }
             }
@@ -852,7 +899,7 @@ class playGame extends Phaser.Scene {
         console.log(`Reward id: ${idPrize}`);
         var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}*`;
 
-        var url = 'https://wa.me/+6281288522088?text=' + encodeURIComponent(msg);
+        var url = 'https://wa.me/send?phone=+6285891225823?text=' + encodeURIComponent(msg);
 
         var s = window.open(url, '_blank');
 
