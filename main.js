@@ -1,14 +1,73 @@
+// import {
+//     initializeApp
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+// import {
+//     getAnalytics
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+// import {
+//     getDatabase,
+//     child,
+//     get
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+// import {
+//     uploadString,
+//     getStorage,
+//     uploadBytes,
+//     uploadBytesResumable,
+//     ref,
+//     getDownloadURL
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
+// import {
+//     getFirestore,
+//     query,
+//     collection,
+//     doc,
+//     addDoc,
+//     setDoc,
+//     getDoc,
+//     getDocs,
+//     where,
+//     orderBy,
+//     limit,
+//     updateDoc
+// } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+
+// import {
+//     initializeApp
+// } from "./lib/firebase-app.js";
+// import {
+//     getAnalytics
+// } from "./lib/firebase-analytics.js";
+// import {
+//     getDatabase,
+//     child,
+//     get
+// } from "./lib/firebase-database.js";
+// import {
+//     uploadString,
+//     getStorage,
+//     uploadBytes,
+//     uploadBytesResumable,
+//     ref,
+//     getDownloadURL
+// } from "./lib/firebase-storage.js";
+// import {
+//     getFirestore,
+//     query,
+//     collection,
+//     doc,
+//     addDoc,
+//     setDoc,
+//     getDoc,
+//     getDocs,
+//     where,
+//     orderBy,
+//     limit,
+//     updateDoc
+// } from "./lib/firebase-firestore.js";
 import {
     initializeApp
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-import {
-    getAnalytics
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
-import {
-    getDatabase,
-    child,
-    get
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+} from "firebase/app";
 import {
     uploadString,
     getStorage,
@@ -16,7 +75,7 @@ import {
     uploadBytesResumable,
     ref,
     getDownloadURL
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
+} from "firebase/storage";
 import {
     getFirestore,
     query,
@@ -30,7 +89,7 @@ import {
     orderBy,
     limit,
     updateDoc
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+} from "firebase/firestore";
 
 // CONFIGURASI FIREBASE
 const firebaseConfig = {
@@ -47,10 +106,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 // Initialize Realtime Database and get a reference to the service
-const database = getDatabase(app);
+// const database = getDatabase(app);
 
 // Initialize Firestore Database and get document
 const db = getFirestore(app);
