@@ -125,7 +125,6 @@ class kuponVoucher extends Phaser.Scene {
         this.load.image("bgDialog", "./img/fieldvoucher.png");
         this.load.image("okButton", "./img/okButton.png");
         this.load.plugin('rexinputtextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js', true);
-
     }
 
     async create() {
@@ -490,7 +489,7 @@ class playGame extends Phaser.Scene {
             world.kuponData = data.txt;
             if (world.wheelContainer != undefined && (window.mobilecheck() != 1)) {
                 world.tweens.add({
-                    targets: [world.wheelContainer, world.circle, world.pin, world.outer], x: world.halfWidth, duration: 3000, ease: 'Power3',
+                    targets: [world.wheelContainer, world.circle, world.pin, world.outer], x: world.halfWidth, duration: 1500, ease: 'Power3',
                     onComplete: function () {
                         world.canSpin = true;
                     }
@@ -593,7 +592,7 @@ class playGame extends Phaser.Scene {
         // }
 
         // adding a container to group wheel and icons
-        this.wheelContainer = window.mobilecheck() == 1 ? this.add.container(game.config.width / 2, game.config.height / 2) : this.add.container(game.config.width / 3.5, game.config.height / 2);
+        this.wheelContainer = window.mobilecheck() == 1 ? this.add.container(game.config.width / 2, game.config.height / 2) : this.add.container(this.halfWidth - (200 * dpr), game.config.height / 2);
 
         // array which will contain all icons
         let iconArray = [];
@@ -723,9 +722,9 @@ class playGame extends Phaser.Scene {
         this.wheelContainer.add(iconArray);
 
         // adding the pin in the middle of the canvas
-        this.circle = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "circle") : this.add.sprite(game.config.width / 3.5, game.config.height / 2, "circle");
-        this.pin = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "pin") : this.add.sprite(game.config.width / 3.5, game.config.height / 2, "pin");
-        this.outer = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "outer") : this.add.sprite(game.config.width / 3.5, game.config.height / 2, "outer");
+        this.circle = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "circle") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "circle");
+        this.pin = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "pin") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "pin");
+        this.outer = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "outer") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "outer");
         this.pin.displayWidth = 150 * window.devicePixelRatio;
         this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.circle.displayWidth = 500 * window.devicePixelRatio;
@@ -1074,6 +1073,7 @@ class playGame extends Phaser.Scene {
 
     claimPrize(idPrize, kode) {
         // Build formData object.
+        let world = this;
         let formData = new FormData();
         formData.append('reward', `${idPrize}`);
         this.game.renderer.snapshot(function (image) {
@@ -1091,7 +1091,7 @@ class playGame extends Phaser.Scene {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
                     var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg);
                     navigator.clipboard.writeText(msg);
-                    alert(msg);
+                    // alert(msg);
 
                     var s = window.open(url, '_blank');
 
