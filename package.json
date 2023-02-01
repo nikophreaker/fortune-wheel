@@ -8,5 +8,9 @@
     "phaser": "^3.55.2"
   },
   "main": "index.html",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "javascript-obfuscator": "^4.0.0",
+    "webpack-obfuscator": "^3.5.1"
+  }
 }

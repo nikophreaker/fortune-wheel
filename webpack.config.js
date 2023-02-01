@@ -1,3 +1,5 @@
+import WebpackObfuscator from "webpack-obfuscator"
+
 export default {
 
     // production mode
@@ -5,6 +7,12 @@ export default {
 
     // input file
     entry: "./main.js",
+
+    plugins: [
+        new WebpackObfuscator({
+            rotateStringArray: true
+        }, ['./dist/bundle.js'])
+    ],
 
     // output file
     output: {

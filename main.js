@@ -435,7 +435,6 @@ class playGame extends Phaser.Scene {
         // }
 
         // loading pin image
-        this.load.html("inputKupon", "./inputkupon.html");
         this.load.image("pin", "./img/pin.png");
         this.load.image("circle", "./img/circle.png");
         this.load.image("outer", "./img/outer.png");
