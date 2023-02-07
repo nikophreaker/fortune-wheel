@@ -32,6 +32,65 @@ import {
     updateDoc
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
 
+// import {
+//     initializeApp
+// } from "./lib/firebase-app.js";
+// import {
+//     getAnalytics
+// } from "./lib/firebase-analytics.js";
+// import {
+//     getDatabase,
+//     child,
+//     get
+// } from "./lib/firebase-database.js";
+// import {
+//     uploadString,
+//     getStorage,
+//     uploadBytes,
+//     uploadBytesResumable,
+//     ref,
+//     getDownloadURL
+// } from "./lib/firebase-storage.js";
+// import {
+//     getFirestore,
+//     query,
+//     collection,
+//     doc,
+//     addDoc,
+//     setDoc,
+//     getDoc,
+//     getDocs,
+//     where,
+//     orderBy,
+//     limit,
+//     updateDoc
+// } from "./lib/firebase-firestore.js";
+// import {
+//     initializeApp
+// } from "firebase/app";
+// import {
+//     uploadString,
+//     getStorage,
+//     uploadBytes,
+//     uploadBytesResumable,
+//     ref,
+//     getDownloadURL
+// } from "firebase/storage";
+// import {
+//     getFirestore,
+//     query,
+//     collection,
+//     doc,
+//     addDoc,
+//     setDoc,
+//     getDoc,
+//     getDocs,
+//     where,
+//     orderBy,
+//     limit,
+//     updateDoc
+// } from "firebase/firestore";
+
 // CONFIGURASI FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyBdFMZoNwEWNqCOfUezoSB-TewpOBUfX98",
@@ -47,10 +106,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 // Initialize Realtime Database and get a reference to the service
-const database = getDatabase(app);
+// const database = getDatabase(app);
 
 // Initialize Firestore Database and get document
 const db = getFirestore(app);
@@ -144,6 +203,9 @@ class kuponVoucher extends Phaser.Scene {
                 direction: 'ltr',
             });
             let inputText = this.inputText;
+            this.inputText.on('textchange', function (inputs, e) {
+                inputText.setText(inputs.text.toString().toUpperCase());
+            }, this);
             let world = this;
             this.btnOk = this.add.sprite(this.halfWidth, this.halfHeight + (90 * dpr), "okButton");
             this.btnOk.setScale(0.25 * dpr);
@@ -1129,3 +1191,4 @@ class playGame extends Phaser.Scene {
         first = true;
     }
 }
+
