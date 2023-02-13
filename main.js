@@ -1027,7 +1027,8 @@ class playGame extends Phaser.Scene {
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
-                    var url = 'https://t.me/+6281288522088&text=' + encodeURIComponent(msg);
+                    var url = 'https://t.me/+6281288522088'; //tele
+                    // var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
                     navigator.clipboard.writeText(msg);
                     // alert(msg);
 
