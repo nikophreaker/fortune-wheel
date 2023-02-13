@@ -32,65 +32,6 @@ import {
     updateDoc
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
 
-// import {
-//     initializeApp
-// } from "./lib/firebase-app.js";
-// import {
-//     getAnalytics
-// } from "./lib/firebase-analytics.js";
-// import {
-//     getDatabase,
-//     child,
-//     get
-// } from "./lib/firebase-database.js";
-// import {
-//     uploadString,
-//     getStorage,
-//     uploadBytes,
-//     uploadBytesResumable,
-//     ref,
-//     getDownloadURL
-// } from "./lib/firebase-storage.js";
-// import {
-//     getFirestore,
-//     query,
-//     collection,
-//     doc,
-//     addDoc,
-//     setDoc,
-//     getDoc,
-//     getDocs,
-//     where,
-//     orderBy,
-//     limit,
-//     updateDoc
-// } from "./lib/firebase-firestore.js";
-// import {
-//     initializeApp
-// } from "firebase/app";
-// import {
-//     uploadString,
-//     getStorage,
-//     uploadBytes,
-//     uploadBytesResumable,
-//     ref,
-//     getDownloadURL
-// } from "firebase/storage";
-// import {
-//     getFirestore,
-//     query,
-//     collection,
-//     doc,
-//     addDoc,
-//     setDoc,
-//     getDoc,
-//     getDocs,
-//     where,
-//     orderBy,
-//     limit,
-//     updateDoc
-// } from "firebase/firestore";
-
 // CONFIGURASI FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyBdFMZoNwEWNqCOfUezoSB-TewpOBUfX98",
@@ -155,13 +96,34 @@ window.onload = function () {
         // scenes used by the game
         scene: [playGame, kuponVoucher]
     };
-
     // game constructor
     game = new Phaser.Game(gameConfig);
-
+    doStuff();
     // pure javascript to give focus to the page/frame
-    window.focus()
+    window.focus();
 }
+
+const doStuff = async () => {
+    // GET SLICE DATA
+    const q = query(colRef, orderBy("id", "asc"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        let datas = {
+            id: data.id,
+            startColor: data.startColor,
+            endColor: data.endColor,
+            rings: data.rings,
+            type: data.type,
+            text: data.text,
+            sliceText: data.sliceText,
+            icon: data.icon,
+            percentage: data.percentage
+        }
+        getSlices.push(datas);
+    });
+};
+
 // Kupon Voucher scene
 class kuponVoucher extends Phaser.Scene {
 
@@ -305,8 +267,8 @@ class playGame extends Phaser.Scene {
         };
 
         // init canvas size
-        this.gameWidth = this.sys.game.scale.width
-        this.gameHeight = this.sys.game.scale.height
+        this.gameWidth = this.sys.game.scale.width;
+        this.gameHeight = this.sys.game.scale.height;
         this.halfWidth = this.gameWidth / 2;
         this.halfHeight = this.gameHeight / 2;
         this.kode = data.kode;
@@ -314,7 +276,9 @@ class playGame extends Phaser.Scene {
 
     // method to be executed when the scene preloads
     preload() {
-
+        // this.load.plugin('rexawaitloaderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexawaitloaderplugin.min.js', true);
+        // this.plugins.get('rexawaitloaderplugin').addToScene(this);
+        // this.load.rexAwait(callback);
         kode = this.kode != undefined ? this.kode : "-";
         getSlices = [];
         var progressBar = this.add.graphics();
@@ -364,93 +328,8 @@ class playGame extends Phaser.Scene {
             precentText.destroy();
         });
 
-        // fetch('https://api.msportsid.com/api/game/tiket', {
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userToken}`
-        //     }
-        // }).then(res => {
-        //     res.json().then(res2 => {
-        //         ticket = res2.data[0].tiket;
-        //         console.log(`User's Ticket : ${ticket}`);
-        //     })
-        // }).catch(err => {
-        //     console.log(err);
-        // });
-
-        // fetch('https://api.msportsid.com/api/game/history_today', {
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userToken}`
-        //     }
-        // }).then(res => {
-        //     res.json().then(res2 => {
-        //         // const value = `Name: ${res2.posts.id}`
-        //         userpull = res2;
-        //         console.log(`User's Pull : ${res2}`);
-        //     })
-        // }).catch(err => {
-        //     console.log(err);
-        // });
         userpull = 0;
         let inputImg = this;
-        // fetch('https://api.msportsid.com/api/game/fortunewheel', {
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userToken}`
-        //     }
-        // }).then(res => {
-        //     res.json().then(res2 => {
-        //         // ticket = res2.data_tiket[0].tiket;
-        //         res2.data_game.forEach((element, idx) => {
-        //             let data = {
-        //                 id: element.id,
-        //                 startColor: element.start_color,
-        //                 endColor: element.end_color,
-        //                 rings: 1,
-        //                 type: element.text,
-        //                 text: element.text,
-        //                 sliceText: element.text,
-        //                 icon: element.icon
-        //             }
-        //             getSlices.push(data);
-        //             // for (let i = 0; i < getSlices.length; i++) {
-        //             // if (getSlices[i].icon != undefined) {
-        //             // inputImg.load.image(`pictures${idx}`, `./img/prize/prize${idx}.png`);
-        //             // console.log("test input image");
-        //             // }
-        //             // }
-        //         });
-        //         console.log(getSlices.length);
-        //     });
-        // }).catch(err => {
-        //     console.log(err);
-        // });
-
-        // GET LEADERBOARD DATA (Highest Score)
-        // const q = query(colRef, orderBy("id", "asc"));
-        // const querySnapshot = await getDocs(q);
-        // var rowWidth = 0;
-        // var rank = 1;
-        // var userInHighest = false;
-        // querySnapshot.forEach((doc) => {
-        //     let data = doc.data();
-        //     let datas = {
-        //         id: data.id,
-        //         startColor: data.startColor,
-        //         endColor: data.endColor,
-        //         rings: data.rings,
-        //         type: data.type,
-        //         text: data.text,
-        //         sliceText: data.sliceText,
-        //         icon: data.icon
-        //     }
-        //     getSlices.push(datas);
-        // });
-
         textStyle = {
             fontFamily: "Arial Black",
             fontSize: 12 * window.devicePixelRatio,
@@ -488,21 +367,6 @@ class playGame extends Phaser.Scene {
                 // width of stroke lines
                 strokeWidth: 1.5 * window.devicePixelRatio
             }
-        // getSlices = getSlices;
-        // this.load.image('diluc', '/img/diluc.png');
-        // this.load.image('ganyu', '/img/ganyu.png');
-        // this.load.image('keqing', '/img/keqing.png');
-        // this.load.image('monna', '/img/mona.png');
-        // this.load.image('qiqi', '/img/qiqi.png');
-        // this.load.image('venti', '/img/venti.png');
-        // this.load.image('zhongli', '/img/zhongli.png');
-        // this.load.image('baal', '/img/baal.png');
-
-        // for (let i = 0; i < getSlices.length; i++) {
-        //     if (getSlices[i].icon != undefined) {
-        //         this.load.image(`picture${i}`, getSlices[i].icon);
-        //     }
-        // }
 
         // loading pin image
         this.load.html("inputKupon", "./inputkupon.html");
@@ -520,23 +384,30 @@ class playGame extends Phaser.Scene {
         this.load.image("pictures7", "./img/prize/prize7.png");
         this.load.image("pictures8", "./img/prize/prize8.png");
 
+        for (let i = 0; i < getSlices.length; i++) {
+            if (getSlices[i].icon != undefined) {
+                this.load.image(`pictures${i + 1}`, getSlices[i].icon);
+                console.log(getSlices[i].icon);
+            }
+        }
+        console.log(getSlices.length);
+        // this.load.image("pictures1", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/slice%2Fprize1.png?alt=media&token=303eba11-14bf-4bd8-a103-fe33bf39ae57");
+
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3');
-
         // loading icons spritesheet
         // this.load.spritesheet("icons", "/img/spritesheet.png", {
         //     frameWidth: 200,
         //     frameHeight: 200
         // });
-
     }
 
     // method to be executed once the scene has been created
-    async create() {
+    create() {
         this.canSpin = false;
         this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
         this.scale.refresh();
@@ -563,29 +434,33 @@ class playGame extends Phaser.Scene {
             }
         }, this);
 
-        // GET LEADERBOARD DATA (Highest Score)
-        const q = query(colRef, orderBy("id", "asc"));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            let data = doc.data();
-            let datas = {
-                id: data.id,
-                startColor: data.startColor,
-                endColor: data.endColor,
-                rings: data.rings,
-                type: data.type,
-                text: data.text,
-                sliceText: data.sliceText,
-                icon: data.icon,
-                percentage: data.percentage
-            }
-            getSlices.push(datas);
-        });
-        for (let i = 0; i < getSlices.length; i++) {
-            if (getSlices[i].icon != undefined) {
-                this.load.image(`picture${i}`, getSlices[i].icon);
-            }
-        }
+        // // GET LEADERBOARD DATA (Highest Score)
+        // const q = query(colRef, orderBy("id", "asc"));
+        // const querySnapshot = await getDocs(q);
+        // querySnapshot.forEach((doc) => {
+        //     let data = doc.data();
+        //     let datas = {
+        //         id: data.id,
+        //         startColor: data.startColor,
+        //         endColor: data.endColor,
+        //         rings: data.rings,
+        //         type: data.type,
+        //         text: data.text,
+        //         sliceText: data.sliceText,
+        //         icon: data.icon,
+        //         percentage: data.percentage
+        //     }
+        //     getSlices.push(datas);
+        // });
+        // for (let i = 0; i < getSlices.length; i++) {
+        //     if (getSlices[i].icon != undefined) {
+        //         this.load.crossOrigin = 'anonymous';
+        //         this.load.image(`pictures${i}`, getSlices[i].icon, {
+        //             withCredentials: true,
+        //         });
+        //         console.log(getSlices[i].icon);
+        //     }
+        // }
 
         this.drumSfx = this.sound.add('drum');
         this.zonkSfx = this.sound.add('zonk');
@@ -814,7 +689,7 @@ class playGame extends Phaser.Scene {
 
         // waiting for your input, then calling "spinWheel" function
         this.pin.on("pointerdown", this.spinWheel, this);
-
+        this.add.image();
         this.scene.pause("PlayGame");
         this.scene.launch("KuponVoucher");
         // // this.input.on("pointerdown", this.spinWheel, this);)
@@ -954,7 +829,8 @@ class playGame extends Phaser.Scene {
                         kupon: this.kuponData,
                         prize: getSlices[i].text,
                         tanggal: tampilTanggal,
-                        waktu: tampilWaktu
+                        waktu: tampilWaktu,
+                        timestamp: date.getTime(),
                     });
                     break;
                 }
@@ -1151,7 +1027,7 @@ class playGame extends Phaser.Scene {
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
-                    var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg);
+                    var url = 'https://t.me/+6281288522088&text=' + encodeURIComponent(msg);
                     navigator.clipboard.writeText(msg);
                     // alert(msg);
 
