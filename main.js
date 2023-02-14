@@ -63,8 +63,35 @@ let textStyle;
 let dpr;
 let scaleSprite;
 
+const gettingData = async () => {
+    // GET SLICE DATA
+    const q = query(colRef, orderBy("id", "asc"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        let datas = {
+            id: data.id,
+            startColor: data.startColor,
+            endColor: data.endColor,
+            rings: data.rings,
+            type: data.type,
+            text: data.text,
+            sliceText: data.sliceText,
+            icon: data.icon,
+            percentage: data.percentage
+        }
+        getSlices.push(datas);
+    });
+};
+
+window.onload = new Promise(() => {
+    return gettingData().then(_ => {
+        games()
+    })
+});
+
 // once the window loads...
-window.onload = function () {
+const games = function () {
 
     // game configuration object
     let gameConfig = {
@@ -247,7 +274,6 @@ class playGame extends Phaser.Scene {
 
     // method to be executed when the scene preloads
     preload() {
-
         kode = this.kode != undefined ? this.kode : "-";
         getSlices = [];
         var progressBar = this.add.graphics();
@@ -297,92 +323,8 @@ class playGame extends Phaser.Scene {
             precentText.destroy();
         });
 
-        // fetch('https://api.msportsid.com/api/game/tiket', {
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userToken}`
-        //     }
-        // }).then(res => {
-        //     res.json().then(res2 => {
-        //         ticket = res2.data[0].tiket;
-        //         console.log(`User's Ticket : ${ticket}`);
-        //     })
-        // }).catch(err => {
-        //     console.log(err);
-        // });
-
-        // fetch('https://api.msportsid.com/api/game/history_today', {
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userToken}`
-        //     }
-        // }).then(res => {
-        //     res.json().then(res2 => {
-        //         // const value = `Name: ${res2.posts.id}`
-        //         userpull = res2;
-        //         console.log(`User's Pull : ${res2}`);
-        //     })
-        // }).catch(err => {
-        //     console.log(err);
-        // });
         userpull = 0;
         let inputImg = this;
-        // fetch('https://api.msportsid.com/api/game/fortunewheel', {
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userToken}`
-        //     }
-        // }).then(res => {
-        //     res.json().then(res2 => {
-        //         // ticket = res2.data_tiket[0].tiket;
-        //         res2.data_game.forEach((element, idx) => {
-        //             let data = {
-        //                 id: element.id,
-        //                 startColor: element.start_color,
-        //                 endColor: element.end_color,
-        //                 rings: 1,
-        //                 type: element.text,
-        //                 text: element.text,
-        //                 sliceText: element.text,
-        //                 icon: element.icon
-        //             }
-        //             getSlices.push(data);
-        //             // for (let i = 0; i < getSlices.length; i++) {
-        //             // if (getSlices[i].icon != undefined) {
-        //             // inputImg.load.image(`pictures${idx}`, `./img/prize/prize${idx}.png`);
-        //             // console.log("test input image");
-        //             // }
-        //             // }
-        //         });
-        //         console.log(getSlices.length);
-        //     });
-        // }).catch(err => {
-        //     console.log(err);
-        // });
-
-        // GET LEADERBOARD DATA (Highest Score)
-        // const q = query(colRef, orderBy("id", "asc"));
-        // const querySnapshot = await getDocs(q);
-        // var rowWidth = 0;
-        // var rank = 1;
-        // var userInHighest = false;
-        // querySnapshot.forEach((doc) => {
-        //     let data = doc.data();
-        //     let datas = {
-        //         id: data.id,
-        //         startColor: data.startColor,
-        //         endColor: data.endColor,
-        //         rings: data.rings,
-        //         type: data.type,
-        //         text: data.text,
-        //         sliceText: data.sliceText,
-        //         icon: data.icon
-        //     }
-        //     getSlices.push(datas);
-        // });
 
         textStyle = {
             fontFamily: "Arial Black",
@@ -421,21 +363,6 @@ class playGame extends Phaser.Scene {
                 // width of stroke lines
                 strokeWidth: 1.5 * window.devicePixelRatio
             }
-        // getSlices = getSlices;
-        // this.load.image('diluc', '/img/diluc.png');
-        // this.load.image('ganyu', '/img/ganyu.png');
-        // this.load.image('keqing', '/img/keqing.png');
-        // this.load.image('monna', '/img/mona.png');
-        // this.load.image('qiqi', '/img/qiqi.png');
-        // this.load.image('venti', '/img/venti.png');
-        // this.load.image('zhongli', '/img/zhongli.png');
-        // this.load.image('baal', '/img/baal.png');
-
-        // for (let i = 0; i < getSlices.length; i++) {
-        //     if (getSlices[i].icon != undefined) {
-        //         this.load.image(`picture${i}`, getSlices[i].icon);
-        //     }
-        // }
 
         // loading pin image
         this.load.image("pin", "./img/pin.png");
@@ -443,28 +370,12 @@ class playGame extends Phaser.Scene {
         this.load.image("outer", "./img/outer.png");
         this.load.image("bg", "./img/bg.jpg");
         this.load.image("button", "./img/claim.png");
-        this.load.image("pictures1", "./img/prize/prize1.png");
-        this.load.image("pictures2", "./img/prize/prize2.png");
-        this.load.image("pictures3", "./img/prize/prize3.png");
-        this.load.image("pictures4", "./img/prize/prize4.png");
-        this.load.image("pictures5", "./img/prize/prize5.png");
-        this.load.image("pictures6", "./img/prize/prize6.png");
-        this.load.image("pictures7", "./img/prize/prize7.png");
-        this.load.image("pictures8", "./img/prize/prize8.png");
-
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3');
-
-        // loading icons spritesheet
-        // this.load.spritesheet("icons", "/img/spritesheet.png", {
-        //     frameWidth: 200,
-        //     frameHeight: 200
-        // });
-
     }
 
     // method to be executed once the scene has been created
@@ -513,9 +424,13 @@ class playGame extends Phaser.Scene {
             }
             getSlices.push(datas);
         });
-        for (let i = 0; i < getSlices.length; i++) {
-            if (getSlices[i].icon != undefined) {
-                this.load.image(`picture${i}`, getSlices[i].icon);
+
+        // For load image from array getSlice[i].icon
+        if (getSlices.length != 0) {
+            for (let i = 0; i < getSlices.length; i++) {
+                if (getSlices[i].icon != undefined) {
+                    this.load.image(`pictures${i}`, getSlices[i].icon);
+                }
             }
         }
 
@@ -532,40 +447,6 @@ class playGame extends Phaser.Scene {
             fontFamily: "Arial Black"
         });
         this.showTicket.visible = true;
-        // var element = this.add.dom(this.gameWidth / 2, this.gameHeight / 2).createFromCache('inputKupon');
-        // var scene = this;
-        // element.setPerspective(800 * dpr);
-
-        // element.addListener('click');
-
-        // element.on('click', function (event) {
-
-        //     if (event.target.name === 'okButton') {
-        //         var inputKode = element.getChildByName('kode');
-
-        //         //  Have they entered anything?
-        //         if (inputKode.value !== '') {
-        //             //  Turn off the click events
-        //             element.removeListener('click');
-
-        //             //  Tween the login form out
-        //             scene.tweens.add({ targets: element.rotate3d, x: 1, w: 90, duration: 3000, ease: 'Power3' });
-
-        //             scene.tweens.add({
-        //                 targets: element, scaleX: 2, scaleY: 2, y: 700, duration: 3000, ease: 'Power3',
-        //                 onComplete: function () {
-        //                     element.setVisible(false);
-        //                 }
-        //             });
-        //         }
-        //         else {
-        //             //  Flash the prompt
-        //             scene.tweens.add({ targets: text, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
-        //         }
-        //     }
-
-        // });
-
     }
 
     createSpin() {
@@ -658,7 +539,7 @@ class playGame extends Phaser.Scene {
 
                 // icon image
                 // let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), 'icons', getSlices[i].iconFrame);
-                let icon = this.add.image(gameOptions.wheelRadius * 0.60 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.60 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), `pictures${i + 1}`);
+                let icon = this.add.image(gameOptions.wheelRadius * 0.60 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.60 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), `pictures${i}`);
                 // let icons = this.add.image(500, 100, `pictures1`);
                 // console.log("test");
                 // console.log(icon);
@@ -672,6 +553,14 @@ class playGame extends Phaser.Scene {
 
                 // add icon to iconArray
                 iconArray.push(icon);
+
+                // retexture
+                this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+                    // texture loaded so use instead of the placeholder
+                    iconArray[i].setTexture(`pictures${i}`)
+                });
+                this.load.removeListener('progress');
+                this.load.start();
             }
 
             // // add slice text, if any
@@ -935,7 +824,7 @@ class playGame extends Phaser.Scene {
                                 this.drumSfx.play();
                                 this.yougot.visible = true;
                                 if (getSlices[prize].icon != undefined) {
-                                    this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `pictures${prize + 1}`);
+                                    this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `pictures${prize}`);
                                     let scaling = window.mobilecheck() == 1 ? 0.2 * dpr : 0.4 * dpr;
                                     this.waifumu.setScale(scaling);
                                     // this.waifumu.setDisplaySize(300, 350);
@@ -1037,32 +926,6 @@ class playGame extends Phaser.Scene {
             getDownloadURL(snapshot.ref).then((downloadURL) => {
             });
         });
-        // uploadTask.on('state_changed',
-        //     (snapshot) => {
-        //         // Observe state change events such as progress, pause, and resume
-        //         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        //         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        //         console.log('Upload is ' + progress + '% done');
-        //         switch (snapshot.state) {
-        //             case 'paused':
-        //                 console.log('Upload is paused');
-        //                 break;
-        //             case 'running':
-        //                 console.log('Upload is running');
-        //                 break;
-        //         }
-        //     },
-        //     (error) => {
-        //         // Handle unsuccessful uploads
-        //     },
-        //     () => {
-        //         // Handle successful uploads on complete
-        //         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        //         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        //             console.log('File available at', downloadURL);
-        //         });
-        //     }
-        // );
     }
 
     claimPrize(idPrize, kode) {
@@ -1083,7 +946,8 @@ class playGame extends Phaser.Scene {
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
-                    var url = 'https://t.me/?phone=6281288522088&text=' + encodeURIComponent(msg);
+                    // var url = 'https://t.me/+6281288522088'; //tele
+                    var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
                     navigator.clipboard.writeText(msg);
                     // alert(msg);
 
