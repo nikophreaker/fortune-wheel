@@ -71,9 +71,34 @@ let textStyle;
 let dpr;
 let scaleSprite;
 
-// once the window loads...
-window.onload = function () {
+const gettingData = async () => {
+    // GET SLICE DATA
+    const q = query(colRef, orderBy("id", "asc"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        let data = doc.data();
+        let datas = {
+            id: data.id,
+            startColor: data.startColor,
+            endColor: data.endColor,
+            rings: data.rings,
+            type: data.type,
+            text: data.text,
+            sliceText: data.sliceText,
+            icon: data.icon,
+            percentage: data.percentage
+        }
+        getSlices.push(datas);
+    });
+};
 
+window.onload = new Promise(() => {
+    return gettingData().then(_ => {
+        games()
+    })
+});
+// once the window loads...
+const games = function () {
     // game configuration object
     let gameConfig = {
 
@@ -98,31 +123,9 @@ window.onload = function () {
     };
     // game constructor
     game = new Phaser.Game(gameConfig);
-    doStuff();
     // pure javascript to give focus to the page/frame
     window.focus();
 }
-
-const doStuff = async () => {
-    // GET SLICE DATA
-    const q = query(colRef, orderBy("id", "asc"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-        let data = doc.data();
-        let datas = {
-            id: data.id,
-            startColor: data.startColor,
-            endColor: data.endColor,
-            rings: data.rings,
-            type: data.type,
-            text: data.text,
-            sliceText: data.sliceText,
-            icon: data.icon,
-            percentage: data.percentage
-        }
-        getSlices.push(datas);
-    });
-};
 
 // Kupon Voucher scene
 class kuponVoucher extends Phaser.Scene {
@@ -313,20 +316,20 @@ class playGame extends Phaser.Scene {
         textLoading.setOrigin(0.5, 0.5);
         precentText.setOrigin(0.5, 0.5);
 
-        this.load.on('progress', function (value) {
-            progressBar.clear();
-            precentText.setText(parseInt(value * 100) + '%');
-            progressBar.clear();
-            progressBar.fillStyle(0xffffff, 1);
-            progressBar.fillRect(((window.innerWidth * window.devicePixelRatio / 2) - (300 / 2)), (window.innerHeight * window.devicePixelRatio / 2) + 10, 300 * value, 30);
-        });
+        // this.load.on('progress', function (value) {
+        //     progressBar.clear();
+        //     precentText.setText(parseInt(value * 100) + '%');
+        //     progressBar.clear();
+        //     progressBar.fillStyle(0xffffff, 1);
+        //     progressBar.fillRect(((window.innerWidth * window.devicePixelRatio / 2) - (300 / 2)), (window.innerHeight * window.devicePixelRatio / 2) + 10, 300 * value, 30);
+        // });
 
-        this.load.on('complete', function (value) {
-            progressBar.destroy();
-            progressBox.destroy();
-            textLoading.destroy();
-            precentText.destroy();
-        });
+        // this.load.on('complete', function (value) {
+        //     progressBar.destroy();
+        //     progressBox.destroy();
+        //     textLoading.destroy();
+        //     precentText.destroy();
+        // });
 
         userpull = 0;
         let inputImg = this;
@@ -375,22 +378,24 @@ class playGame extends Phaser.Scene {
         this.load.image("outer", "./img/outer.png");
         this.load.image("bg", "./img/bg.jpg");
         this.load.image("button", "./img/claim.png");
-        this.load.image("pictures1", "./img/prize/prize1.png");
-        this.load.image("pictures2", "./img/prize/prize2.png");
-        this.load.image("pictures3", "./img/prize/prize3.png");
-        this.load.image("pictures4", "./img/prize/prize4.png");
-        this.load.image("pictures5", "./img/prize/prize5.png");
-        this.load.image("pictures6", "./img/prize/prize6.png");
-        this.load.image("pictures7", "./img/prize/prize7.png");
-        this.load.image("pictures8", "./img/prize/prize8.png");
+        // this.load.image("pictures1", "./img/prize/prize1.png");
+        // this.load.image("pictures2", "./img/prize/prize2.png");
+        // this.load.image("pictures3", "./img/prize/prize3.png");
+        // this.load.image("pictures4", "./img/prize/prize4.png");
+        // this.load.image("pictures5", "./img/prize/prize5.png");
+        // this.load.image("pictures6", "./img/prize/prize6.png");
+        // this.load.image("pictures7", "./img/prize/prize7.png");
+        // this.load.image("pictures8", "./img/prize/prize8.png");
 
-        for (let i = 0; i < getSlices.length; i++) {
-            if (getSlices[i].icon != undefined) {
-                this.load.image(`pictures${i + 1}`, getSlices[i].icon);
-                console.log(getSlices[i].icon);
-            }
-        }
-        console.log(getSlices.length);
+        // this.load.image(`pictures1`, "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/slice%2Fprize1.png?alt=media&token=303eba11-14bf-4bd8-a103-fe33bf39ae57");
+        // this.load.image(`pictures2`, getSlices[1].icon);
+        // for (let i = 0; i < getSlices.length; i++) {
+        //     if (getSlices[i].icon != undefined) {
+        //         this.load.image(`pictures${i + 1}`, getSlices[i].icon);
+        //         console.log(getSlices[i].icon);
+        //     }
+        // }
+        // console.log(getSlices.length);
         // this.load.image("pictures1", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/slice%2Fprize1.png?alt=media&token=303eba11-14bf-4bd8-a103-fe33bf39ae57");
 
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
@@ -407,7 +412,7 @@ class playGame extends Phaser.Scene {
     }
 
     // method to be executed once the scene has been created
-    create() {
+    async create() {
         this.canSpin = false;
         this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
         this.scale.refresh();
@@ -435,32 +440,32 @@ class playGame extends Phaser.Scene {
         }, this);
 
         // // GET LEADERBOARD DATA (Highest Score)
-        // const q = query(colRef, orderBy("id", "asc"));
-        // const querySnapshot = await getDocs(q);
-        // querySnapshot.forEach((doc) => {
-        //     let data = doc.data();
-        //     let datas = {
-        //         id: data.id,
-        //         startColor: data.startColor,
-        //         endColor: data.endColor,
-        //         rings: data.rings,
-        //         type: data.type,
-        //         text: data.text,
-        //         sliceText: data.sliceText,
-        //         icon: data.icon,
-        //         percentage: data.percentage
-        //     }
-        //     getSlices.push(datas);
-        // });
-        // for (let i = 0; i < getSlices.length; i++) {
-        //     if (getSlices[i].icon != undefined) {
-        //         this.load.crossOrigin = 'anonymous';
-        //         this.load.image(`pictures${i}`, getSlices[i].icon, {
-        //             withCredentials: true,
-        //         });
-        //         console.log(getSlices[i].icon);
-        //     }
-        // }
+        const q = query(colRef, orderBy("id", "asc"));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            let data = doc.data();
+            let datas = {
+                id: data.id,
+                startColor: data.startColor,
+                endColor: data.endColor,
+                rings: data.rings,
+                type: data.type,
+                text: data.text,
+                sliceText: data.sliceText,
+                icon: data.icon,
+                percentage: data.percentage
+            }
+            getSlices.push(datas);
+        });
+
+        // For load image from array getSlice[i].icon
+        if (getSlices.length != 0) {
+            for (let i = 0; i < getSlices.length; i++) {
+                if (getSlices[i].icon != undefined) {
+                    this.load.image(`pictures${i}`, getSlices[i].icon);
+                }
+            }
+        }
 
         this.drumSfx = this.sound.add('drum');
         this.zonkSfx = this.sound.add('zonk');
@@ -615,6 +620,14 @@ class playGame extends Phaser.Scene {
 
                 // add icon to iconArray
                 iconArray.push(icon);
+
+                // console.log(iconArray[i]);
+                // retexture
+                this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+                    // texture loaded so use instead of the placeholder
+                    iconArray[i].setTexture(`pictures${i}`)
+                });
+                this.load.start();
             }
 
             // // add slice text, if any
