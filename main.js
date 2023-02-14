@@ -47,10 +47,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
-// Initialize Realtime Database and get a reference to the service
-// const database = getDatabase(app);
 
 // Initialize Firestore Database and get document
 const db = getFirestore(app);
@@ -97,6 +93,7 @@ window.onload = new Promise(() => {
         games()
     })
 });
+
 // once the window loads...
 const games = function () {
     // game configuration object
@@ -279,9 +276,6 @@ class playGame extends Phaser.Scene {
 
     // method to be executed when the scene preloads
     preload() {
-        // this.load.plugin('rexawaitloaderplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexawaitloaderplugin.min.js', true);
-        // this.plugins.get('rexawaitloaderplugin').addToScene(this);
-        // this.load.rexAwait(callback);
         kode = this.kode != undefined ? this.kode : "-";
         getSlices = [];
         var progressBar = this.add.graphics();
@@ -316,20 +310,20 @@ class playGame extends Phaser.Scene {
         textLoading.setOrigin(0.5, 0.5);
         precentText.setOrigin(0.5, 0.5);
 
-        // this.load.on('progress', function (value) {
-        //     progressBar.clear();
-        //     precentText.setText(parseInt(value * 100) + '%');
-        //     progressBar.clear();
-        //     progressBar.fillStyle(0xffffff, 1);
-        //     progressBar.fillRect(((window.innerWidth * window.devicePixelRatio / 2) - (300 / 2)), (window.innerHeight * window.devicePixelRatio / 2) + 10, 300 * value, 30);
-        // });
+        this.load.on('progress', function (value) {
+            progressBar.clear();
+            precentText.setText(parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(((window.innerWidth * window.devicePixelRatio / 2) - (300 / 2)), (window.innerHeight * window.devicePixelRatio / 2) + 10, 300 * value, 30);
+        });
 
-        // this.load.on('complete', function (value) {
-        //     progressBar.destroy();
-        //     progressBox.destroy();
-        //     textLoading.destroy();
-        //     precentText.destroy();
-        // });
+        this.load.on('complete', function (value) {
+            progressBar.destroy();
+            progressBox.destroy();
+            textLoading.destroy();
+            precentText.destroy();
+        });
 
         userpull = 0;
         let inputImg = this;
@@ -378,37 +372,12 @@ class playGame extends Phaser.Scene {
         this.load.image("outer", "./img/outer.png");
         this.load.image("bg", "./img/bg.jpg");
         this.load.image("button", "./img/claim.png");
-        // this.load.image("pictures1", "./img/prize/prize1.png");
-        // this.load.image("pictures2", "./img/prize/prize2.png");
-        // this.load.image("pictures3", "./img/prize/prize3.png");
-        // this.load.image("pictures4", "./img/prize/prize4.png");
-        // this.load.image("pictures5", "./img/prize/prize5.png");
-        // this.load.image("pictures6", "./img/prize/prize6.png");
-        // this.load.image("pictures7", "./img/prize/prize7.png");
-        // this.load.image("pictures8", "./img/prize/prize8.png");
-
-        // this.load.image(`pictures1`, "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/slice%2Fprize1.png?alt=media&token=303eba11-14bf-4bd8-a103-fe33bf39ae57");
-        // this.load.image(`pictures2`, getSlices[1].icon);
-        // for (let i = 0; i < getSlices.length; i++) {
-        //     if (getSlices[i].icon != undefined) {
-        //         this.load.image(`pictures${i + 1}`, getSlices[i].icon);
-        //         console.log(getSlices[i].icon);
-        //     }
-        // }
-        // console.log(getSlices.length);
-        // this.load.image("pictures1", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/slice%2Fprize1.png?alt=media&token=303eba11-14bf-4bd8-a103-fe33bf39ae57");
-
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3');
-        // loading icons spritesheet
-        // this.load.spritesheet("icons", "/img/spritesheet.png", {
-        //     frameWidth: 200,
-        //     frameHeight: 200
-        // });
     }
 
     // method to be executed once the scene has been created
@@ -480,40 +449,6 @@ class playGame extends Phaser.Scene {
             fontFamily: "Arial Black"
         });
         this.showTicket.visible = true;
-        // var element = this.add.dom(this.gameWidth / 2, this.gameHeight / 2).createFromCache('inputKupon');
-        // var scene = this;
-        // element.setPerspective(800 * dpr);
-
-        // element.addListener('click');
-
-        // element.on('click', function (event) {
-
-        //     if (event.target.name === 'okButton') {
-        //         var inputKode = element.getChildByName('kode');
-
-        //         //  Have they entered anything?
-        //         if (inputKode.value !== '') {
-        //             //  Turn off the click events
-        //             element.removeListener('click');
-
-        //             //  Tween the login form out
-        //             scene.tweens.add({ targets: element.rotate3d, x: 1, w: 90, duration: 3000, ease: 'Power3' });
-
-        //             scene.tweens.add({
-        //                 targets: element, scaleX: 2, scaleY: 2, y: 700, duration: 3000, ease: 'Power3',
-        //                 onComplete: function () {
-        //                     element.setVisible(false);
-        //                 }
-        //             });
-        //         }
-        //         else {
-        //             //  Flash the prompt
-        //             scene.tweens.add({ targets: text, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
-        //         }
-        //     }
-
-        // });
-
     }
 
     createSpin() {
@@ -606,7 +541,7 @@ class playGame extends Phaser.Scene {
 
                 // icon image
                 // let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), 'icons', getSlices[i].iconFrame);
-                let icon = this.add.image(gameOptions.wheelRadius * 0.60 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.60 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), `pictures${i + 1}`);
+                let icon = this.add.image(gameOptions.wheelRadius * 0.60 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.60 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), `pictures${i}`);
                 // let icons = this.add.image(500, 100, `pictures1`);
                 // console.log("test");
                 // console.log(icon);
@@ -621,12 +556,12 @@ class playGame extends Phaser.Scene {
                 // add icon to iconArray
                 iconArray.push(icon);
 
-                // console.log(iconArray[i]);
                 // retexture
                 this.load.once(Phaser.Loader.Events.COMPLETE, () => {
                     // texture loaded so use instead of the placeholder
                     iconArray[i].setTexture(`pictures${i}`)
                 });
+                this.load.removeListener('progress');
                 this.load.start();
             }
 
@@ -892,7 +827,7 @@ class playGame extends Phaser.Scene {
                                 this.drumSfx.play();
                                 this.yougot.visible = true;
                                 if (getSlices[prize].icon != undefined) {
-                                    this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `pictures${prize + 1}`);
+                                    this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `pictures${prize}`);
                                     let scaling = window.mobilecheck() == 1 ? 0.2 * dpr : 0.4 * dpr;
                                     this.waifumu.setScale(scaling);
                                     // this.waifumu.setDisplaySize(300, 350);
@@ -1040,8 +975,8 @@ class playGame extends Phaser.Scene {
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
-                    var url = 'https://t.me/+6281288522088'; //tele
-                    // var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
+                    // var url = 'https://t.me/+6281288522088'; //tele
+                    var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
                     navigator.clipboard.writeText(msg);
                     // alert(msg);
 
