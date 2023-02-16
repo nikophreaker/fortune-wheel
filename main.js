@@ -48,6 +48,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const col = "luckyspin-vip";
 const col2 = "kupon-vip";
+const col3 = "prizespinwheel-vip";
 const colRef = collection(db, col);
 const colRef2 = collection(db, col2);
 
@@ -773,7 +774,7 @@ class playGame extends Phaser.Scene {
                     var tampilTanggal = "Tanggal: " + hari + ", " + tanggal + " " + bulan + " " + tahun;
                     var tampilWaktu = "Jam: " + jam + ":" + menit + ":" + detik;
                     // Add a new document in collection "cities"
-                    await addDoc(collection(db, "prizespinwheel"), {
+                    await addDoc(collection(db, col3), {
                         kupon: this.kuponData,
                         prize: getSlices[i].text,
                         tanggal: tampilTanggal,
