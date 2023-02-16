@@ -211,6 +211,9 @@ class kuponVoucher extends Phaser.Scene {
                 direction: 'ltr',
             });
             let inputText = this.inputText;
+            this.inputText.on('textchange', function (inputs, e) {
+                inputText.setText(inputs.text.toString().toUpperCase());
+            }, this);
             let world = this;
             this.btnOk = this.add.sprite(this.halfWidth + (300 * dpr), this.halfHeight + (165 * dpr), "okButton");
             this.btnOk.setScale(0.5 * dpr);
