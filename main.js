@@ -46,8 +46,10 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore Database and get document
 const db = getFirestore(app);
-const colRef = collection(db, "luckyspin");
-const colRef2 = collection(db, "kupon");
+const col = "luckyspin-vip";
+const col2 = "kupon-vip";
+const colRef = collection(db, col);
+const colRef2 = collection(db, col2);
 
 // the game itself
 let game;
@@ -184,7 +186,7 @@ class kuponVoucher extends Phaser.Scene {
                 } else {
                     querySnapshot.forEach(async (docs) => {
                         let data = docs.data();
-                        const docChange = doc(db, "kupon", `${data.id}`);
+                        const docChange = doc(db, col2, `${data.id}`);
                         await updateDoc(docChange, {
                             active: false
                         });
@@ -226,7 +228,7 @@ class kuponVoucher extends Phaser.Scene {
                 } else {
                     querySnapshot.forEach(async (docs) => {
                         let data = docs.data();
-                        const docChange = doc(db, "kupon", `${data.id}`);
+                        const docChange = doc(db, col2, `${data.id}`);
                         await updateDoc(docChange, {
                             active: false
                         });
