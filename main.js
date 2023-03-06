@@ -382,6 +382,12 @@ class playGame extends Phaser.Scene {
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3');
+        this.load.spritesheet('handcursor', './img/handcursorsprite.png', {
+            frameWidth: 480,
+            frameHeight: 480,
+            startFrame: 0,
+            endFrame: 17
+        });
     }
 
     // method to be executed once the scene has been created
@@ -402,10 +408,32 @@ class playGame extends Phaser.Scene {
                 world.tweens.add({
                     targets: [world.wheelContainer, world.circle, world.pin, world.outer], x: world.halfWidth, duration: 1500, ease: 'Power3',
                     onComplete: function () {
+                        let animConfig = {
+                            key: "hand",
+                            frames: world.anims.generateFrameNumbers("handcursor"),
+                            frameRate: 12,
+                            repeat: -1,
+                        };
+                        world.anims.create(animConfig);
+
+                        // display the sprite
+                        world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
+                        world.hand.anims.play("hand");
                         world.canSpin = true;
                     }
                 });
             } else if (world.wheelContainer != undefined && (window.mobilecheck() == 1)) {
+                let animConfig = {
+                    key: "hand",
+                    frames: world.anims.generateFrameNumbers("handcursor"),
+                    frameRate: 12,
+                    repeat: -1,
+                };
+                world.anims.create(animConfig);
+
+                // display the sprite
+                world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
+                world.hand.anims.play("hand");
                 world.canSpin = true;
             } else {
                 console.log("ups something wrong");
@@ -664,7 +692,7 @@ class playGame extends Phaser.Scene {
 
     // function to spin the wheel
     async spinWheel() {
-
+        this.hand.setVisible(false);
         // can we spin the wheel?
         if (this.canSpin) {
 
