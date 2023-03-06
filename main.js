@@ -380,8 +380,8 @@ class playGame extends Phaser.Scene {
         this.load.audio('sound', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/sound.mp3?token=AIEJHUQ3OVWNLZO3BAZOFFK65CBTI');
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
-        // this.load.audio('spin', './sounds/spinsound.mp3');
-        this.load.audio("spin", "./sounds/test.mp3");
+        this.load.audio('spin', './sounds/spinsound.mp3');
+        // this.load.audio("spin", "./sounds/test.mp3");
 
         this.load.spritesheet('handcursor', './img/handcursorsprite.png', {
             frameWidth: 480,
@@ -834,7 +834,7 @@ class playGame extends Phaser.Scene {
                 angle: 360 * rounds - randDegrees,
 
                 // tween duration
-                duration: 10253, //Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
+                duration: 9479, //Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
                 // tween easing
                 ease: "Cubic.easeOut",
 
@@ -847,7 +847,7 @@ class playGame extends Phaser.Scene {
                     this.tweens.add({
                       targets: [this.wheelContainer],
                       angle: this.wheelContainer.angle, //- backDegrees,
-                      delay: 2000,
+                      delay: 1122,
                       duration: 0,
                       ease: "Cubic.easeOut",
                       callbackScope: this,
