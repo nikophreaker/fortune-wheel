@@ -1000,7 +1000,7 @@ class playGame extends Phaser.Scene {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari m88livespin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
                     // var url = 'https://t.me/+6281288522088'; //tele
-                    var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
+                    var url = 'https://wa.me/?phone=639691475492&text=' + encodeURIComponent(msg); // wa
                     navigator.clipboard.writeText(msg);
                     // alert(msg);
 
