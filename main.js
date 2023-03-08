@@ -383,6 +383,8 @@ class playGame extends Phaser.Scene {
         this.load.audio('drum', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/drum.mp3?token=AIEJHUWNNKXYQMDHCQ6MOES65CBYE');
         this.load.audio('zonk', './sounds/oof.mp3');
         this.load.audio('spin', './sounds/spinsound.mp3');
+        // this.load.audio("spin", "./sounds/test1.mp3");
+
         this.load.spritesheet('handcursor', './img/handcursorsprite.png', {
             frameWidth: 480,
             frameHeight: 480,
@@ -393,6 +395,7 @@ class playGame extends Phaser.Scene {
 
     // method to be executed once the scene has been created
     async create() {
+
         this.canSpin = false;
         this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight);
         this.scale.refresh();
@@ -403,38 +406,41 @@ class playGame extends Phaser.Scene {
 
         var world = this;
         this.events.on("resume", (scene, data) => {
+            Swal.fire("Spin Now!");
+
             this.showTicket.setText(`Current Kode: ${data.txt}`);
             world.kuponData = data.txt;
             if (world.wheelContainer != undefined && (window.mobilecheck() != 1)) {
                 world.tweens.add({
                     targets: [world.wheelContainer, world.circle, world.pin, world.outer], x: world.halfWidth, duration: 1500, ease: 'Power3',
                     onComplete: function () {
-                        let animConfig = {
-                            key: "hand",
-                            frames: world.anims.generateFrameNumbers("handcursor"),
-                            frameRate: 12,
-                            repeat: -1,
-                        };
-                        world.anims.create(animConfig);
+
+                        // let animConfig = {
+                        //     key: "hand",
+                        //     frames: world.anims.generateFrameNumbers("handcursor"),
+                        //     frameRate: 12,
+                        //     repeat: -1,
+                        // };
+                        // world.anims.create(animConfig);
 
                         // display the sprite
-                        world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
-                        world.hand.anims.play("hand");
+                        // world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
+                        // world.hand.anims.play("hand");
                         world.canSpin = true;
                     }
                 });
             } else if (world.wheelContainer != undefined && (window.mobilecheck() == 1)) {
-                let animConfig = {
-                    key: "hand",
-                    frames: world.anims.generateFrameNumbers("handcursor"),
-                    frameRate: 12,
-                    repeat: -1,
-                };
-                world.anims.create(animConfig);
+                // let animConfig = {
+                //     key: "hand",
+                //     frames: world.anims.generateFrameNumbers("handcursor"),
+                //     frameRate: 12,
+                //     repeat: -1,
+                // };
+                // world.anims.create(animConfig);
 
                 // display the sprite
-                world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
-                world.hand.anims.play("hand");
+                // world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
+                // world.hand.anims.play("hand");
                 world.canSpin = true;
             } else {
                 console.log("ups something wrong");
@@ -693,7 +699,7 @@ class playGame extends Phaser.Scene {
 
     // function to spin the wheel
     async spinWheel() {
-        this.hand.setVisible(false);
+        // this.hand.setVisible(false);
         // can we spin the wheel?
         if (this.canSpin) {
 
@@ -830,8 +836,7 @@ class playGame extends Phaser.Scene {
                 angle: 360 * rounds - randDegrees,
 
                 // tween duration
-                duration: 11000, //Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
-
+                duration: 10200 , //Phaser.Math.Between(gameOptions.rotationTimeRange.min, gameOptions.rotationTimeRange.max),
                 // tween easing
                 ease: "Cubic.easeOut",
 
@@ -842,75 +847,89 @@ class playGame extends Phaser.Scene {
                 onComplete: function (tween) {
                     // another tween to rotate a bit in the opposite direction
                     this.tweens.add({
-                        targets: [this.wheelContainer],
-                        angle: this.wheelContainer.angle, //- backDegrees,
-                        duration: 0,
-                        ease: "Cubic.easeOut",
-                        callbackScope: this,
-                        onComplete: function (tween) {
-                            this.spinSfx.stop();
-                            // displaying prize text
-                            this.prizeText.setText(getSlices[prize].text);
-                            this.wheelContainer.visible = false;
-                            this.pin.visible = false;
-                            this.circle.visible = false;
-                            this.outer.visible = false;
+                      targets: [this.wheelContainer],
+                      angle: this.wheelContainer.angle, //- backDegrees,
+                      delay: 1500,
+                      duration: 0,
+                      ease: "Cubic.easeOut",
+                      callbackScope: this,
+                      onComplete: function (tween) {
+                        this.spinSfx.stop();
+                        // displaying prize text
+                        this.prizeText.setText(getSlices[prize].text);
+                        this.wheelContainer.visible = false;
+                        this.pin.visible = false;
+                        this.circle.visible = false;
+                        this.outer.visible = false;
 
-                            if (getSlices[prize].text != "ZONK") {
-                                this.drumSfx.play();
-                                this.yougot.visible = true;
-                                if (getSlices[prize].icon != undefined) {
-                                    this.waifumu = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY + 20, `pictures${prize}`);
-                                    let scaling = window.mobilecheck() == 1 ? 0.2 * dpr : 0.4 * dpr;
-                                    this.waifumu.setScale(scaling);
-                                    // this.waifumu.setDisplaySize(300, 350);
-                                    this.waifumu.visible = true;
-                                    this.claimButton = this.add.sprite(this.waifumu.x, this.waifumu.y + 350, 'button');
-                                    this.claimButton.setInteractive();
-                                    this.claimButton.on("pointerover", function () {
-                                    });
-                                    this.claimButton.on("pointerout", function () {
-                                    });
-                                    this.claimButton.on("pointerdown", function () {
-                                        worlds.claimPrize(prize, worlds.kuponData)
-                                    });
-                                }
+                        if (getSlices[prize].text != "ZONK") {
+                          this.drumSfx.play();
+                          this.yougot.visible = true;
+                          if (getSlices[prize].icon != undefined) {
+                            this.waifumu = this.add.sprite(
+                              this.cameras.main.centerX,
+                              this.cameras.main.centerY + 20,
+                              `pictures${prize}`
+                            );
+                            let scaling =
+                              window.mobilecheck() == 1 ? 0.2 * dpr : 0.4 * dpr;
+                            this.waifumu.setScale(scaling);
+                            // this.waifumu.setDisplaySize(300, 350);
+                            this.waifumu.visible = true;
+                            this.claimButton = this.add.sprite(
+                              this.waifumu.x,
+                              this.waifumu.y + 350,
+                              "button"
+                            );
+                            this.claimButton.setInteractive();
+                            this.claimButton.on("pointerover", function () {});
+                            this.claimButton.on("pointerout", function () {});
+                            this.claimButton.on("pointerdown", function () {
+                              worlds.claimPrize(prize, worlds.kuponData);
+                            });
+                          }
 
-                                // this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got \n ${getSlices[prize].text}! \n Congrats :D`, {
-                                //     fontSize: 24 * window.devicePixelRatio,
-                                //     fontFamily: 'Arial Black',
-                                //     color: 'red',
-                                //     backgroundColor: 'transparent',
-                                //     align: 'center'
-                                // }).setOrigin(0.5);
-                            } else {
-                                this.zonkSfx.play();
-                                this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got zonk...`, {
-                                    fontSize: 24 * window.devicePixelRatio,
-                                    fontFamily: 'Arial Black',
-                                    color: 'red',
-                                    backgroundColor: 'transparent'
-                                }).setOrigin(0.5);
-
-                            }
-
-                            // const barScene = this.scene.get('PlayGame');
-
-                            // barScene.events.once('destroy', function () {
-                            //     console.log("destroy");
-                            //     worlds.scene.add('PlayGame', this, true);
-                            // }, this);
-                            // barScene.events.once('remove', function () {
-                            //     console.log("remove");
-                            //     worlds.scene.add('PlayGame', this, true);
-                            // }, this);
-
-                            // this.restart.visible = true;
-                            // player can spin again
-                            this.canSpin = false;
-                            // this.input.on("pointerdown", this.restartGame, this);
+                          // this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `You got \n ${getSlices[prize].text}! \n Congrats :D`, {
+                          //     fontSize: 24 * window.devicePixelRatio,
+                          //     fontFamily: 'Arial Black',
+                          //     color: 'red',
+                          //     backgroundColor: 'transparent',
+                          //     align: 'center'
+                          // }).setOrigin(0.5);
+                        } else {
+                          this.zonkSfx.play();
+                          this.add
+                            .text(
+                              this.cameras.main.centerX,
+                              this.cameras.main.centerY,
+                              `You got zonk...`,
+                              {
+                                fontSize: 24 * window.devicePixelRatio,
+                                fontFamily: "Arial Black",
+                                color: "red",
+                                backgroundColor: "transparent",
+                              }
+                            )
+                            .setOrigin(0.5);
                         }
-                    })
+
+                        // const barScene = this.scene.get('PlayGame');
+
+                        // barScene.events.once('destroy', function () {
+                        //     console.log("destroy");
+                        //     worlds.scene.add('PlayGame', this, true);
+                        // }, this);
+                        // barScene.events.once('remove', function () {
+                        //     console.log("remove");
+                        //     worlds.scene.add('PlayGame', this, true);
+                        // }, this);
+
+                        // this.restart.visible = true;
+                        // player can spin again
+                        this.canSpin = false;
+                        // this.input.on("pointerdown", this.restartGame, this);
+                      },
+                    });
                 }
             });
         }
@@ -981,9 +1000,11 @@ class playGame extends Phaser.Scene {
             const storageRef = ref(storage, `ssPrize/${time}.png`);
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
-                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
+                    // var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari m88livespin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
+                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari m88livespin.com dengan kode voucher *${kode}*`;
+
                     // var url = 'https://t.me/+6281288522088'; //tele
-                    var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
+                    var url = 'https://wa.me/?phone=639691475492&text=' + encodeURIComponent(msg); // wa
                     navigator.clipboard.writeText(msg);
                     // alert(msg);
 
