@@ -104,8 +104,7 @@ const games = function () {
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
             width: window.innerWidth * window.devicePixelRatio,
-            height: window.innerHeight * window.devicePixelRatio,
-            type: Phaser.AUTO
+            height: window.innerHeight * window.devicePixelRatio
         },
         dom: {
             createContainer: true
@@ -141,7 +140,6 @@ class kuponVoucher extends Phaser.Scene {
         this.halfWidth = this.gameWidth / 2;
         this.halfHeight = this.gameHeight / 2;
         dpr = window.devicePixelRatio;
-        console.log(window.devicePixelRatio);
     }
 
     preload() {
