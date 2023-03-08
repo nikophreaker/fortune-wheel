@@ -197,7 +197,7 @@ class kuponVoucher extends Phaser.Scene {
             });
         } else {
             var dialogBg = this.add.sprite(this.halfWidth + (300 * dpr), this.halfHeight, "bgDialog");
-            dialogBg.setScale(0.5);
+            dialogBg.setScale(0.5 * dpr);
             this.inputText = this.add.rexInputText(this.halfWidth + (300 * dpr), this.halfHeight + (55 * dpr), 300 * dpr, 100 * dpr, {
                 // Style properties
                 align: "center",
