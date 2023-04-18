@@ -646,13 +646,13 @@ class playGame extends Phaser.Scene {
         // adding the pin in the middle of the canvas
         this.circle = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "circle") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "circle");
         this.pin = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "pin") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "pin");
-        this.outer = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "outer") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "outer");
+        this.outer = window.mobilecheck() == 1 ? this.add.sprite(this.halfWidth - (20 * dpr), this.halfHeight + (10 * dpr), "outer") : this.add.sprite(this.halfWidth - (225 * dpr), this.halfHeight + (10 * dpr), "outer");
         this.pin.displayWidth = 150 * window.devicePixelRatio;
         this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.circle.displayWidth = 500 * window.devicePixelRatio;
         this.circle.displayHeight = 500 * window.devicePixelRatio;
-        this.outer.displayWidth = 460 * window.devicePixelRatio;
-        this.outer.displayHeight = 460 * window.devicePixelRatio;
+        this.outer.displayWidth = 550 * window.devicePixelRatio;
+        this.outer.displayHeight = 500 * window.devicePixelRatio;
         this.pin.setInteractive();
 
         // this.pin.on('pointerdown', function (pointer) {
