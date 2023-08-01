@@ -45,9 +45,9 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore Database and get document
 const db = getFirestore(app);
-const col = "luckyspin";
-const col2 = "kupon";
-const col3 = "prizespinwheel";
+const col = "luckyspin-mobile";
+const col2 = "kupon-mobile";
+const col3 = "prizespinwheel-mobile";
 const colRef = collection(db, col);
 const colRef2 = collection(db, col2);
 
