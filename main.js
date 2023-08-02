@@ -331,43 +331,30 @@ class playGame extends Phaser.Scene {
         userpull = 0;
         let inputImg = this;
 
-        textStyle = {
-            fontFamily: "Arial Black",
-            fontSize: 12 * window.devicePixelRatio,
-            fontStyle: "normal",
-            align: "center"
-        },
-
-            // setting gameOptions
-            gameOptions = {
-
-                // wheel rotation duration range, in milliseconds
-                rotationTimeRange: {
-                    min: 2000,
-                    max: 2000
-                },
-
-                // wheel rounds before it stops
-                wheelRounds: {
-                    min: 7,
-                    max: 9
-                },
-
-                // degrees the wheel will rotate in the opposite direction before it stops
-                backSpin: {
-                    min: 0,
-                    max: 0
-                },
-
-                // wheel radius, in pixels
-                wheelRadius: 200 * window.devicePixelRatio,
-
-                // color of stroke lines
-                strokeColor: 0x3D3D3D, //0xffffff,
-
-                // width of stroke lines
-                strokeWidth: 1.5 * window.devicePixelRatio
-            }
+        // setting gameOptions
+        gameOptions = {
+            // wheel rotation duration range, in milliseconds
+            rotationTimeRange: {
+                min: 2000,
+                max: 2000
+            },
+            // wheel rounds before it stops
+            wheelRounds: {
+                min: 7,
+                max: 9
+            },
+            // degrees the wheel will rotate in the opposite direction before it stops
+            backSpin: {
+                min: 0,
+                max: 0
+            },
+            // wheel radius, in pixels
+            wheelRadius: 200 * window.devicePixelRatio,
+            // color of stroke lines
+            strokeColor: 0x3D3D3D, //0xffffff,
+            // width of stroke lines
+            strokeWidth: 1.5 * window.devicePixelRatio
+        }
 
         // loading pin image
         this.load.image("pin", "./img/pin.png");
@@ -490,7 +477,7 @@ class playGame extends Phaser.Scene {
         let graphics = this.make.graphics({
             x: 0,
             y: 0,
-            add: false
+            add: false,
         });
 
         // if (window.mobilecheck() == 1) {
@@ -573,12 +560,13 @@ class playGame extends Phaser.Scene {
                 // icon image
                 // let icon = this.add.image(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), 'icons', getSlices[i].iconFrame);
                 let icon = this.add.image(gameOptions.wheelRadius * 0.60 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.60 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), `pictures${i}`);
+                
                 // let icons = this.add.image(500, 100, `pictures1`);
                 // console.log("test");
                 // console.log(icon);
                 // scaling the icon according to game preferences
-                icon.scaleX = 0.1 * window.devicePixelRatio; //getSlices[i].iconScale;
-                icon.scaleY = 0.1 * window.devicePixelRatio; //getSlices[i].iconScale;
+                icon.scaleX = 0.07 * window.devicePixelRatio; //getSlices[i].iconScale; //0.1 without text
+                icon.scaleY = 0.07 * window.devicePixelRatio; //getSlices[i].iconScale; //0.1 without text
 
                 // rotating the icon
                 icon.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
@@ -587,27 +575,45 @@ class playGame extends Phaser.Scene {
                 // add icon to iconArray
                 iconArray.push(icon);
 
-                // retexture
+                // // retexture without text
+                // this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+                //     // texture loaded so use instead of the placeholder
+                //     iconArray[i].setTexture(`pictures${i}`)
+                // });
+
+                // retexture with text
                 this.load.once(Phaser.Loader.Events.COMPLETE, () => {
                     // texture loaded so use instead of the placeholder
-                    iconArray[i].setTexture(`pictures${i}`)
+                    iconArray[i+i].setTexture(`pictures${i}`)
                 });
+
                 this.load.removeListener('progress');
                 this.load.start();
             }
 
             // // add slice text, if any
-            // if (getSlices[i].sliceText != undefined) {
+            if (getSlices[i].sliceText != undefined) {
+
+                textStyle = {
+                    fontFamily: "Arial Black",
+                    fontSize: 12 * window.devicePixelRatio,
+                    fontStyle: "normal",
+                    align: "center",
+                    wordWrap: { width: (3.14 * gameOptions.wheelRadius) / getSlices.length, useAdvancedWrap: true },
+                }
 
             //     // the text
-            //     let text = this.add.text(gameOptions.wheelRadius * 0.85 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.85 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), getSlices[i].sliceText, textStyle);
+                let text = this.add.text(gameOptions.wheelRadius * 0.82 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.82 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), getSlices[i].sliceText, textStyle);
             //     // let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), getSlices[i].sliceText, getSlices[i].sliceTextStyle);
 
             //     // set text origin to its center
-            //     text.setOrigin(0.5);
+                text.setOrigin(0.5);
+
+                //fix blurry text
+                text.setResolution(10);
 
             //     // set text angle
-            //     text.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
+                text.angle = startDegrees + (360 / getSlices.length) / 2 + 90;
             //     // text.angle = startDegrees + getSlices[i].degrees / 2 + 90;
 
             //     // stroke text, if required
@@ -616,8 +622,8 @@ class playGame extends Phaser.Scene {
             //     }
 
             //     // add text to iconArray
-            //     iconArray.push(text);
-            // }
+                iconArray.push(text);
+            }
 
             // updating degrees
             startDegrees += (360 / getSlices.length);
