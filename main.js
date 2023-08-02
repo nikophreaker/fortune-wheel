@@ -605,7 +605,7 @@ class playGame extends Phaser.Scene {
             //     // the text
                 let text = this.add.text(gameOptions.wheelRadius * 0.82 * Math.cos(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), gameOptions.wheelRadius * 0.82 * Math.sin(Phaser.Math.DegToRad(startDegrees + (360 / getSlices.length) / 2)), getSlices[i].sliceText, textStyle);
             //     // let text = this.add.text(gameOptions.wheelRadius * 0.75 * Math.cos(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), gameOptions.wheelRadius * 0.75 * Math.sin(Phaser.Math.DegToRad(startDegrees + getSlices[i].degrees / 2)), getSlices[i].sliceText, getSlices[i].sliceTextStyle);
-
+               
             //     // set text origin to its center
                 text.setOrigin(0.5);
 
@@ -946,7 +946,7 @@ class playGame extends Phaser.Scene {
         //     ticket = ticket - 1
         // }
     }
-
+    
     exportCanvasAsPNG(fileName, dataUrl) {
         // var canvasElement = document.getElementById(id);
         var MIME_TYPE = "image/png";
