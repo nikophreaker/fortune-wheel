@@ -48,8 +48,10 @@ const db = getFirestore(app);
 const col = "luckyspin-mobile";
 const col2 = "kupon-mobile";
 const col3 = "prizespinwheel-mobile";
+const col4 = "luckyspin-mobile-settings";
 const colRef = collection(db, col);
 const colRef2 = collection(db, col2);
+const docRef = doc(db, col4, "1");
 
 // the game itself
 let game;
@@ -57,6 +59,7 @@ var kode;
 var userpull;
 var getSlices = [];
 var sliceSize = [];
+var settings;
 var first = true;
 var inresult = false;
 
@@ -86,9 +89,25 @@ const gettingData = async () => {
     });
 };
 
+const gettingSettingData = async () => {
+    //Get Setting Data
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        // console.log(docSnap.data())
+        return docSnap.data()
+    } else {
+        console.log("No such Document!")
+    }
+}
+
 window.onload = new Promise(() => {
     return gettingData().then(_ => {
         games()
+        gettingSettingData().then( data => {
+            console.log(data)
+            settings = data
+            document.title = data.name
+        })
     })
 });
 
@@ -143,12 +162,16 @@ class kuponVoucher extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("bgDialog", "./img/fieldvoucher.png");
-        this.load.image("okButton", "./img/okButton.png");
+        this.load.image("bgDialog", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Ffieldvoucher.png?alt=media&token=5c1bb5d7-5513-4fee-8c37-69f05370c10b");
+        this.load.image("okButton", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2FokButton.png?alt=media&token=346ad3ee-b1b2-47dc-b880-0f08aa3d7b0d");
         this.load.plugin('rexinputtextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js', true);
     }
 
     async create() {
+        if (settings != undefined) {
+            this.load.image("bgDialog1", settings.field_voucher)
+            this.load.image("okButton1", settings.button)
+        }
         if (window.mobilecheck() == 1) {
             this.add.graphics().setDepth(0).fillStyle(0x000000, 0.8).fillRect(0, 0, this.gameWidth, this.gameHeight);
             var dialogBg = this.add.sprite(this.halfWidth, this.halfHeight, "bgDialog");
@@ -357,10 +380,10 @@ class playGame extends Phaser.Scene {
         }
 
         // loading pin image
-        this.load.image("pin", "./img/pin.png");
+        this.load.image("pin", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Fpin.png?alt=media&token=3547962a-e591-4497-86d1-49ef72914187");
         this.load.image("circle", "./img/circle.png");
-        this.load.image("outer", "./img/outer.png");
-        this.load.image("bg", "./img/bg.jpg");
+        this.load.image("outer", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Fouter.png?alt=media&token=4053d615-1da2-4e0e-948a-595faf37aa55");
+        this.load.image("bg", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Fbg.jpg?alt=media&token=d6ee63a7-35f6-40b2-8674-a13a5ae4c2e3");
         this.load.image("button", "./img/claim.png");
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
@@ -648,6 +671,7 @@ class playGame extends Phaser.Scene {
         this.pin = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "pin") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "pin");
         this.outer = window.mobilecheck() == 1 ? this.add.sprite(this.halfWidth - (5 * dpr), this.halfHeight + (5 * dpr), "outer") : this.add.sprite(this.halfWidth - (200 * dpr), this.halfHeight + (5 * dpr), "outer");
         // old2 // this.outer = window.mobilecheck() == 1 ? this.add.sprite(this.halfWidth - (20 * dpr), this.halfHeight + (10 * dpr), "outer") : this.add.sprite(this.halfWidth - (225 * dpr), this.halfHeight + (10 * dpr), "outer");
+        
         this.pin.displayWidth = 150 * window.devicePixelRatio;
         this.pin.displayHeight = 150 * window.devicePixelRatio;
         this.circle.displayWidth = 500 * window.devicePixelRatio;
@@ -986,19 +1010,21 @@ class playGame extends Phaser.Scene {
             const storageRef = ref(storage, `ssPrize/${time}.png`);
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
-                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin.com dengan kode voucher *${kode}* \n\n${downloadURL}`;
+                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin dengan kode voucher *${kode}* \n\n${downloadURL}`;
                     // var url = 'https://t.me/+6281288522088'; //tele
-                    var url = 'https://wa.me/?phone=6281288522088&text=' + encodeURIComponent(msg); // wa
-                    navigator.clipboard.writeText(msg);
-                    // alert(msg);
+                    if (settings.numberphone != undefined) {
+                        var url = `https://wa.me/?phone=${settings.numberphone}&text=` + encodeURIComponent(msg); // wa
+                        navigator.clipboard.writeText(msg);
+                        // alert(msg);
 
-                    var s = window.open(url, '_blank');
+                        var s = window.open(url, '_blank');
 
-                    if (s && s.focus) {
-                        s.focus();
-                    }
-                    else if (!s) {
-                        window.location.href = url;
+                        if (s && s.focus) {
+                            s.focus();
+                        }
+                        else if (!s) {
+                            window.location.href = url;
+                        }
                     }
                 });
             });
