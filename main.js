@@ -426,8 +426,8 @@ class playGame extends Phaser.Scene {
                         world.anims.create(animConfig);
 
                         // display the sprite
-                        world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
-                        world.hand.anims.play("hand");
+                        // world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
+                        // world.hand.anims.play("hand");
                         world.canSpin = true;
                     }
                 });
@@ -441,8 +441,8 @@ class playGame extends Phaser.Scene {
                 world.anims.create(animConfig);
 
                 // display the sprite
-                world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
-                world.hand.anims.play("hand");
+                // world.hand = world.add.sprite(world.halfWidth, world.halfHeight, 'handcursor');
+                // world.hand.anims.play("hand");
                 world.canSpin = true;
             } else {
                 console.log("ups something wrong");
@@ -722,7 +722,7 @@ class playGame extends Phaser.Scene {
 
     // function to spin the wheel
     async spinWheel() {
-        this.hand.setVisible(false);
+        // this.hand.setVisible(false);
         // can we spin the wheel?
         if (this.canSpin) {
 
