@@ -1013,7 +1013,7 @@ class playGame extends Phaser.Scene {
                     var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin dengan kode voucher *${kode}* \n\n${downloadURL}`;
                     // var url = 'https://t.me/+6281288522088'; //tele
                     if (settings.numberphone != undefined) {
-                        var url = `https://wa.me/?phone=${settings.numberphone}&text=` + encodeURIComponent(msg); // wa
+                        var url = `whatsapp://send?phone=${settings.numberphone}&text=` + encodeURIComponent(msg); // wa
                         navigator.clipboard.writeText(msg);
                         // alert(msg);
 
