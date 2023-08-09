@@ -1010,7 +1010,7 @@ class playGame extends Phaser.Scene {
             const storageRef = ref(storage, `ssPrize/${time}.png`);
             uploadString(storageRef, image.src, 'data_url').then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((downloadURL) => {
-                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari M88Spin dengan kode voucher *${kode}* \n\n${downloadURL}`;
+                    var msg = `Saya Mendapatkan *${getSlices[idPrize].text}* dari AkuMauJuara-Fortune Wheel dengan kode voucher *${kode}* \n\n${downloadURL}`;
                     // var url = 'https://t.me/+6281288522088'; //tele
                     if (settings.numberphone != undefined) {
                         var url = `whatsapp://send?phone=${settings.numberphone}&text=` + encodeURIComponent(msg); // wa
