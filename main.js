@@ -162,8 +162,8 @@ class kuponVoucher extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("bgDialog", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Ffieldvoucher.png?alt=media&token=5c1bb5d7-5513-4fee-8c37-69f05370c10b");
-        this.load.image("okButton", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2FokButton.png?alt=media&token=346ad3ee-b1b2-47dc-b880-0f08aa3d7b0d");
+        this.load.image("bgDialog", "./img/halloween/bgDialog.png");
+        this.load.image("okButton", "./img/halloween/okButton.png");
         this.load.plugin('rexinputtextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js', true);
     }
 
@@ -176,7 +176,7 @@ class kuponVoucher extends Phaser.Scene {
             this.add.graphics().setDepth(0).fillStyle(0x000000, 0.8).fillRect(0, 0, this.gameWidth, this.gameHeight);
             var dialogBg = this.add.sprite(this.halfWidth, this.halfHeight, "bgDialog");
             dialogBg.setScale(0.25 * dpr);
-            this.inputText = this.add.rexInputText(this.halfWidth, this.halfHeight + (28 * dpr), 120 * dpr, 100 * dpr, {
+            this.inputText = this.add.rexInputText(this.halfWidth, this.halfHeight + (23 * dpr), 120 * dpr, 35 * dpr, {
                 // Style properties
                 align: "center",
                 fontSize: `${12 * dpr}px`,
@@ -192,7 +192,7 @@ class kuponVoucher extends Phaser.Scene {
                 inputText.setText(inputs.text.toString().toUpperCase());
             }, this);
             let world = this;
-            this.btnOk = this.add.sprite(this.halfWidth, this.halfHeight + (90 * dpr), "okButton");
+            this.btnOk = this.add.sprite(this.halfWidth, this.halfHeight + (60 * dpr), "okButton");
             this.btnOk.setScale(0.25 * dpr);
             this.btnOk.setInteractive();
             this.btnOk.on("pointerover", function () {
@@ -221,7 +221,7 @@ class kuponVoucher extends Phaser.Scene {
         } else {
             var dialogBg = this.add.sprite(this.halfWidth + (300 * dpr), this.halfHeight, "bgDialog");
             dialogBg.setScale(0.5);
-            this.inputText = this.add.rexInputText(this.halfWidth + (300 * dpr), this.halfHeight + (55 * dpr), 300 * dpr, 100 * dpr, {
+            this.inputText = this.add.rexInputText(this.halfWidth + (300 * dpr), this.halfHeight + (50 * dpr), 300 * dpr, 60 * dpr, {
                 // Style properties
                 align: "center",
                 fontSize: `${24 * dpr}px`,
@@ -237,7 +237,7 @@ class kuponVoucher extends Phaser.Scene {
                 inputText.setText(inputs.text.toString().toUpperCase());
             }, this);
             let world = this;
-            this.btnOk = this.add.sprite(this.halfWidth + (300 * dpr), this.halfHeight + (165 * dpr), "okButton");
+            this.btnOk = this.add.sprite(this.halfWidth + (300 * dpr), this.halfHeight + (120 * dpr), "okButton");
             this.btnOk.setScale(0.5 * dpr);
             this.btnOk.setInteractive();
             this.btnOk.on("pointerover", function () {
@@ -380,10 +380,10 @@ class playGame extends Phaser.Scene {
         }
 
         // loading pin image
-        this.load.image("pin", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Fpin.png?alt=media&token=3547962a-e591-4497-86d1-49ef72914187");
+        this.load.image("pin", "./img/halloween/pin2.png");
         this.load.image("circle", "./img/circle.png");
-        this.load.image("outer", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Fouter.png?alt=media&token=4053d615-1da2-4e0e-948a-595faf37aa55");
-        this.load.image("bg", "https://firebasestorage.googleapis.com/v0/b/mgoalindo---app.appspot.com/o/luckspin-mobile%2Fbg.jpg?alt=media&token=d6ee63a7-35f6-40b2-8674-a13a5ae4c2e3");
+        this.load.image("outer", "./img/halloween/outer.png");
+        this.load.image("bg", "./img/halloween/bg.png");
         this.load.image("button", "./img/claim.png");
         this.load.image('yougot', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/back.jpg?token=AIEJHUX5QOTUCFFYWAEQI7265DL4U');
         this.load.image('restart', 'https://raw.githubusercontent.com/prateeksawhney97/Spin-And-Win-Game-JavaScript/master/Assets/restart.png?token=AIEJHUTPRGASQSETEX4ABQK65CBRS');
@@ -667,15 +667,15 @@ class playGame extends Phaser.Scene {
         this.wheelContainer.add(iconArray);
 
         // adding the pin in the middle of the canvas
-        this.circle = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "circle") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "circle");
+        // this.circle = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "circle") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "circle");
         this.pin = window.mobilecheck() == 1 ? this.add.sprite(game.config.width / 2, game.config.height / 2, "pin") : this.add.sprite(this.halfWidth - (200 * dpr), game.config.height / 2, "pin");
         this.outer = window.mobilecheck() == 1 ? this.add.sprite(this.halfWidth - (5 * dpr), this.halfHeight + (5 * dpr), "outer") : this.add.sprite(this.halfWidth - (200 * dpr), this.halfHeight + (5 * dpr), "outer");
         // old2 // this.outer = window.mobilecheck() == 1 ? this.add.sprite(this.halfWidth - (20 * dpr), this.halfHeight + (10 * dpr), "outer") : this.add.sprite(this.halfWidth - (225 * dpr), this.halfHeight + (10 * dpr), "outer");
         
         this.pin.displayWidth = 150 * window.devicePixelRatio;
         this.pin.displayHeight = 150 * window.devicePixelRatio;
-        this.circle.displayWidth = 500 * window.devicePixelRatio;
-        this.circle.displayHeight = 500 * window.devicePixelRatio;
+        // this.circle.displayWidth = 500 * window.devicePixelRatio;
+        // this.circle.displayHeight = 500 * window.devicePixelRatio;
         this.outer.displayWidth = 460 * window.devicePixelRatio; //550 (old2)
         this.outer.displayHeight = 460 * window.devicePixelRatio; //550 (old2)
         this.pin.setInteractive();
@@ -882,7 +882,7 @@ class playGame extends Phaser.Scene {
                             this.prizeText.setText(getSlices[prize].text);
                             this.wheelContainer.visible = false;
                             this.pin.visible = false;
-                            this.circle.visible = false;
+                            // this.circle.visible = false;
                             this.outer.visible = false;
 
                             if (getSlices[prize].text != "ZONK") {
