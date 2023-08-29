@@ -191,6 +191,28 @@ class kuponVoucher extends Phaser.Scene {
             this.inputText.on('textchange', function (inputs, e) {
                 inputText.setText(inputs.text.toString().toUpperCase());
             }, this);
+            this.inputText.on('keydown', async function (inputs, e) {
+                if (e.key === 'Enter') {
+                    let txt = inputText.text
+                    // GET KODE DATA
+                    const q = query(colRef2, where("kode", "==", txt), where("active", "==", true));
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.size == 0) {
+                        alert("Kode tidak ditemukan!");
+                    } else {
+                        querySnapshot.forEach(async (docs) => {
+                            let data = docs.data();
+                            const docChange = doc(db, col2, `${data.id}`);
+                            await updateDoc(docChange, {
+                                active: false
+                            });
+                            world.scene.resume("PlayGame", { txt });
+                            world.scene.stop("KuponVoucher");
+                        });
+                    }
+                }
+            }, this);
+
             let world = this;
             this.btnOk = this.add.sprite(this.halfWidth, this.halfHeight + (80 * dpr), "okButton");
             this.btnOk.setScale(0.45 * dpr);
