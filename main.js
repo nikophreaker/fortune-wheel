@@ -175,8 +175,8 @@ class kuponVoucher extends Phaser.Scene {
         if (window.mobilecheck() == 1) {
             this.add.graphics().setDepth(0).fillStyle(0x000000, 0.8).fillRect(0, 0, this.gameWidth, this.gameHeight);
             var dialogBg = this.add.sprite(this.halfWidth, this.halfHeight, "bgDialog");
-            dialogBg.setScale(0.25 * dpr);
-            this.inputText = this.add.rexInputText(this.halfWidth, this.halfHeight + (23 * dpr), 120 * dpr, 35 * dpr, {
+            dialogBg.setScale(0.35 * dpr);
+            this.inputText = this.add.rexInputText(this.halfWidth, this.halfHeight + (35 * dpr), 120 * dpr, 40 * dpr, {
                 // Style properties
                 align: "center",
                 fontSize: `${12 * dpr}px`,
@@ -192,8 +192,8 @@ class kuponVoucher extends Phaser.Scene {
                 inputText.setText(inputs.text.toString().toUpperCase());
             }, this);
             let world = this;
-            this.btnOk = this.add.sprite(this.halfWidth, this.halfHeight + (60 * dpr), "okButton");
-            this.btnOk.setScale(0.25 * dpr);
+            this.btnOk = this.add.sprite(this.halfWidth, this.halfHeight + (80 * dpr), "okButton");
+            this.btnOk.setScale(0.45 * dpr);
             this.btnOk.setInteractive();
             this.btnOk.on("pointerover", function () {
             });
